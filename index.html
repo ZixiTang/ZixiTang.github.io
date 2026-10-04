@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Zixi Tang — neuroscience researcher and builder in Berlin. Research, AI products, design and craft.">
+<title>Zixi Tang — Explore. Connect. Build.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0c11;
+    --surface:#10131b;
+    --surface-2:#141826;
+    --ink:#eae7df;
+    --muted:#8b93a5;
+    --faint:#5b6373;
+    --line-solid:#212836;
+    --light:#e6be6a;
+    --light-dim:rgba(230,190,106,.13);
+    --serif:"Instrument Serif",Georgia,serif;
+    --sans:"Instrument Sans",-apple-system,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  ::selection{background:var(--light);color:var(--bg)}
+  a{color:inherit;text-decoration:none}
+  button{background:none;border:none;color:inherit;font:inherit;cursor:pointer}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:1px solid var(--light);outline-offset:3px;border-radius:2px}
+
+  /* ================= chrome ================= */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:rgba(10,12,17,.7);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line-solid);
+  }
+  .nav-inner{
+    max-width:1280px;margin:0 auto;padding:17px 40px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .nav-name{font-family:var(--mono);font-size:13px;letter-spacing:.28em}
+  .nav-name .dot{color:var(--light)}
+  .nav-links{display:flex;gap:26px}
+  .nav-links a{
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;
+    color:var(--muted);transition:color .25s;
+  }
+  .nav-links a:hover{color:var(--light)}
+
+  #cursor-light{
+    position:fixed;top:0;left:0;width:360px;height:360px;border-radius:50%;
+    pointer-events:none;z-index:1;
+    background:radial-gradient(circle,rgba(230,190,106,.06) 0%,transparent 62%);
+    mix-blend-mode:screen;opacity:0;transition:opacity .8s;will-change:transform;
+  }
+  body.has-cursor #cursor-light{opacity:1}
+
+  #converge-flash{
+    position:fixed;inset:0;pointer-events:none;z-index:60;
+    background:radial-gradient(circle at 50% 50%,rgba(230,190,106,.2),transparent 62%);
+    opacity:0;
+  }
+  body.converged #converge-flash{animation:cflash 1.5s ease-out 1}
+  @keyframes cflash{0%{opacity:0}22%{opacity:1}100%{opacity:0}}
+
+  /* tracker */
+  #tracker{
+    position:fixed;right:30px;top:50%;transform:translateY(-50%);
+    z-index:40;display:flex;flex-direction:column;align-items:center;
+  }
+  .t-node{position:relative;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+  .t-dot{width:7px;height:7px;border-radius:50%;background:transparent;border:1px solid var(--faint);transition:all .4s ease}
+  .t-node.visited .t-dot{background:var(--light);border-color:var(--light);box-shadow:0 0 10px rgba(230,190,106,.55)}
+  .t-node.active .t-dot{transform:scale(1.6)}
+  .t-label{
+    position:absolute;right:30px;top:50%;transform:translateY(-50%) translateX(6px);
+    font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--muted);
+    white-space:nowrap;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;
+  }
+  .t-node:hover .t-label,.t-node.active .t-label{opacity:1;transform:translateY(-50%)}
+  .t-seg{width:1px;height:22px;background:var(--line-solid);transition:background .8s}
+  body.converged .t-seg{background:var(--light)}
+  .t-count{margin-top:12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;color:var(--faint);transition:color .6s}
+  body.converged .t-count{color:var(--light)}
+
+  /* bottom chrome */
+  .tagline{
+    position:fixed;left:40px;bottom:22px;z-index:40;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
+    color:var(--faint);transition:color .6s,text-shadow .6s;
+  }
+  body.converged .tagline{color:var(--light);text-shadow:0 0 18px rgba(230,190,106,.5)}
+  .kbd-hint{
+    position:fixed;right:34px;bottom:22px;z-index:40;
+    font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--faint);
+  }
+  #pager{
+    position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:45;
+    display:flex;align-items:center;gap:16px;
+    background:rgba(10,12,17,.6);backdrop-filter:blur(10px);
+    border:1px solid var(--line-solid);border-radius:100px;
+    padding:8px 12px;
+  }
+  .pg-btn{
+    width:34px;height:34px;border-radius:50%;
+    border:1px solid var(--line-solid);
+    color:var(--muted);font-family:var(--mono);font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .3s;
+  }
+  .pg-btn:hover:not(:disabled){color:var(--light);border-color:var(--light)}
+  .pg-btn:disabled{opacity:.3;cursor:default}
+  #pg-label{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;
+    color:var(--muted);min-width:150px;text-align:center;
+  }
+
+  /* ================= view system (pure CSS :target router) ================= */
+  .stage{position:fixed;inset:0}
+  .view{
+    position:absolute;inset:0;
+    padding-top:64px;
+    display:none;
+  }
+  .view:target{display:flex;animation:viewIn .5s ease}
+  #v-home{display:flex}
+  .view:target ~ #v-home{display:none}
+  @keyframes viewIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .vf{opacity:0}
+  .view:target .vf,#v-home .vf{
+    animation:fadeUp .6s ease both;
+    animation-delay:calc(var(--i,0)*90ms);
+  }
+
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.3em;
+    color:var(--muted);text-transform:uppercase;
+    display:flex;align-items:center;gap:14px;
+  }
+  .eyebrow::before{content:"";display:block;width:32px;height:1px;background:var(--light)}
+
+  /* ================= HOME ================= */
+  #v-home{flex-direction:column}
+  .home-inner{
+    flex:1;max-width:1240px;width:100%;margin:0 auto;
+    padding:0 72px 92px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    position:relative;
+  }
+  .hero-art{
+    position:absolute;inset:0;z-index:0;
+    display:flex;justify-content:flex-end;align-items:flex-start;
+    pointer-events:none;overflow:hidden;
+  }
+  .hero-art svg{height:82%;width:min(58vw,860px);opacity:.9}
+  .hero-content{position:relative;z-index:1;max-width:620px;padding-top:7vh}
+  #v-home h1{
+    font-family:var(--mono);font-weight:500;
+    font-size:clamp(19px,2vw,24px);letter-spacing:.42em;
+    margin:22px 0 16px;
+  }
+  .hero-statement{
+    font-family:var(--serif);
+    font-size:clamp(32px,4.2vw,54px);
+    line-height:1.12;font-weight:400;letter-spacing:-.01em;
+  }
+  .hero-statement em{font-style:italic;color:var(--light)}
+  .hero-meta{
+    margin-top:18px;
+    font-family:var(--mono);font-size:12.5px;line-height:2;
+    color:var(--muted);letter-spacing:.06em;
+  }
+  .hero-actions{margin-top:28px;display:flex;gap:13px;flex-wrap:wrap}
+  .btn{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;
+    padding:12px 22px;border-radius:2px;
+    border:1px solid var(--line-solid);color:var(--muted);
+    transition:all .3s ease;display:inline-block;
+  }
+  .btn:hover{color:var(--ink);border-color:var(--faint)}
+  .btn-primary{border-color:var(--light);color:var(--light);background:var(--light-dim)}
+  .btn-primary:hover{background:var(--light);color:var(--bg);box-shadow:0 0 28px rgba(230,190,106,.25)}
+
+  .portals{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  }
+  .portal{
+    display:block;text-align:left;
+    background:var(--surface);
+    border:1px solid var(--line-solid);border-radius:4px;
+    padding:22px 24px 20px;
+    transition:transform .35s ease,border-color .35s ease,background .35s ease;
+    position:relative;overflow:hidden;
+  }
+  .portal::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:linear-gradient(90deg,var(--light),transparent 70%);
+    transform:scaleX(0);transform-origin:left;transition:transform .45s ease;
+  }
+  .portal:hover{transform:translateY(-4px);border-color:rgba(230,190,106,.4);background:var(--surface-2)}
+  .portal:hover::after{transform:scaleX(1)}
+  .portal-num{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;color:var(--light)}
+  .portal h3{font-family:var(--mono);font-weight:500;font-size:17px;letter-spacing:.16em;margin:10px 0 2px}
+  .portal-sub{font-size:13px;color:var(--muted)}
+  .portal-go{
+    margin-top:14px;display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--faint);
+    transition:color .3s;
+  }
+  .portal:hover .portal-go{color:var(--light)}
+
+  /* ================= DIMENSION VIEWS ================= */
+  .dim{
+    width:100%;max-width:1240px;margin:0 auto;
+    padding:34px 72px 92px;
+    display:grid;grid-template-columns:minmax(280px,400px) 1fr;gap:64px;
+    position:relative;
+  }
+  .dim-path{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .dim-path svg{position:absolute;right:-8%;top:0;height:100%;width:60%;opacity:.55}
+  .dim-head{position:relative;z-index:1;padding-top:4vh}
+  .ghost{
+    position:absolute;top:-2vh;left:-14px;
+    font-family:var(--serif);font-size:clamp(140px,17vw,220px);
+    line-height:1;color:rgba(234,231,223,.035);
+    pointer-events:none;user-select:none;
+  }
+  .dim-head .eyebrow{margin-bottom:18px}
+  .dim-title{
+    font-family:var(--mono);font-weight:500;
+    font-size:clamp(26px,2.6vw,34px);letter-spacing:.2em;
+  }
+  .dim-sub{font-family:var(--sans);font-size:15px;color:var(--muted);margin:8px 0 22px}
+  .dim-frame{
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(20px,1.9vw,25px);line-height:1.35;color:var(--ink);
+    max-width:320px;
+  }
+  .dim-frame em{color:var(--light);font-style:italic}
+  .dim-hint{
+    margin-top:26px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--faint);
+  }
+  .contact-strip{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}
+
+  /* accordion — native <details> */
+  .acc{position:relative;z-index:1;overflow-y:auto;padding:2px 6px 20px 2px;scrollbar-width:thin;scrollbar-color:var(--line-solid) transparent}
+  .acc::-webkit-scrollbar{width:4px}
+  .acc::-webkit-scrollbar-thumb{background:var(--line-solid);border-radius:2px}
+  .item{
+    background:var(--surface);
+    border:1px solid var(--line-solid);border-radius:4px;
+    margin-bottom:13px;
+    transition:border-color .35s ease,background .35s ease;
+  }
+  .item:hover{border-color:var(--faint)}
+  .item[open]{border-color:rgba(230,190,106,.45);background:var(--surface-2)}
+  .item-head{
+    width:100%;text-align:left;cursor:pointer;
+    display:flex;align-items:flex-start;gap:18px;
+    padding:19px 22px;
+    list-style:none;
+  }
+  .item-head::-webkit-details-marker{display:none}
+  .item-idx{font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--light);padding-top:6px;min-width:22px}
+  .item-main{flex:1}
+  .item-title{font-family:var(--serif);font-weight:400;font-size:21px;line-height:1.25}
+  .item-teaser{display:block;font-size:13.5px;color:var(--muted);margin-top:3px}
+  .item-x{
+    font-family:var(--mono);font-size:17px;color:var(--faint);
+    padding-top:3px;transition:transform .4s ease,color .3s;
+  }
+  .item[open] .item-x{transform:rotate(45deg);color:var(--light)}
+  .item-detail{
+    padding:0 22px 22px 62px;
+    display:flex;flex-direction:column;gap:13px;
+  }
+  .item[open] .item-detail{animation:fadeUp .45s ease}
+  .d-row{border-top:1px solid var(--line-solid);padding-top:11px}
+  .d-label{
+    font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+    color:var(--light);text-transform:uppercase;display:block;margin-bottom:3px;
+  }
+  .d-row p{font-size:13.5px;color:var(--muted);line-height:1.6}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;padding-top:4px}
+  .chip{
+    font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+    color:var(--muted);border:1px solid var(--line-solid);
+    border-radius:2px;padding:5px 10px;
+  }
+  .d-actions{display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
+  .mini-btn{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
+    padding:9px 16px;border-radius:2px;
+    border:1px solid var(--light);color:var(--light);
+    transition:all .3s;display:inline-block;
+  }
+  .mini-btn:hover{background:var(--light);color:var(--bg)}
+  .mini-btn.ghosted{border-color:var(--line-solid);color:var(--faint);cursor:default}
+  .item-link{display:block}
+  .item-link .item-head{align-items:center}
+  .item-link .item-x{transform:none!important;font-size:14px}
+  .item-link:hover .item-x{color:var(--light)}
+
+  /* photo galleries inside expanded items */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-top:6px}
+  .gallery.g1{grid-template-columns:minmax(0,340px)}
+  .gallery a{display:block;border:1px solid var(--line-solid);border-radius:3px;overflow:hidden;background:var(--surface)}
+  .gallery img{width:100%;height:110px;object-fit:cover;display:block;filter:saturate(.92);transition:transform .45s ease}
+  .gallery.g1 img{height:190px;object-position:top}
+  .gallery a:hover img{transform:scale(1.04)}
+  .gcap{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:var(--muted);padding:7px 9px;border-top:1px solid var(--line-solid)}
+
+  /* ================= responsive ================= */
+  @media (max-width:960px){
+    .nav-inner{padding:15px 22px}
+    .nav-links{gap:18px}
+    .home-inner{padding:0 22px 96px}
+    .hero-content{padding-top:2vh}
+    .hero-art svg{opacity:.28;width:100vw}
+    .portals{grid-template-columns:1fr;gap:10px}
+    .portal{padding:16px 18px 14px}
+    .portal-go{margin-top:8px}
+    .view{overflow-y:auto}
+    .view{padding-top:58px}
+    .view:target{display:block}
+    #v-home{display:block}
+    .view:target ~ #v-home{display:none}
+    .dim{grid-template-columns:1fr;gap:26px;padding:22px 22px 110px}
+    .dim-head{padding-top:0}
+    .ghost{font-size:120px;top:-18px}
+    .dim-frame{max-width:none}
+    .dim-hint{display:none}
+    .acc{overflow:visible;padding:0}
+    .item-detail{padding-left:22px}
+    .gallery{grid-template-columns:repeat(2,1fr)}
+    #tracker,.kbd-hint,#cursor-light,.tagline{display:none}
+  }
+  @media (max-height:730px) and (min-width:961px){
+    .hero-content{padding-top:2vh}
+    .hero-statement{font-size:clamp(28px,3.6vw,44px)}
+    .portal-go{margin-top:8px}
+  }
+
+  /* ================= reduced motion ================= */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .mover,#cursor-light,#converge-flash{display:none}
+    .vf{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-name" href="#">ZIXI TANG<span class="dot"> ·</span></a>
+    <div class="nav-links">
+      <a href="TangZixi-CV-EN.pdf" target="_blank">CV</a>
+      <a href="https://github.com/ZixiTang" target="_blank" rel="noopener">GITHUB</a>
+      <a href="https://www.linkedin.com/in/zixi-tang-648497333/" target="_blank" rel="noopener">LINKEDIN</a>
+    </div>
+  </div>
+</nav>
+
+<div id="cursor-light" aria-hidden="true"></div>
+<div id="converge-flash" aria-hidden="true"></div>
+
+<aside id="tracker" role="navigation" aria-label="Views">
+  <a class="t-node" href="#" data-vi="0"><span class="t-label">00 · ORIGIN</span><span class="t-dot"></span></a>
+  <div class="t-seg"></div>
+  <a class="t-node" href="#v-understand" data-vi="1"><span class="t-label">01 · UNDERSTAND</span><span class="t-dot"></span></a>
+  <div class="t-seg"></div>
+  <a class="t-node" href="#v-build" data-vi="2"><span class="t-label">02 · BUILD</span><span class="t-dot"></span></a>
+  <div class="t-seg"></div>
+  <a class="t-node" href="#v-experiment" data-vi="3"><span class="t-label">03 · EXPERIMENT</span><span class="t-dot"></span></a>
+  <div class="t-seg"></div>
+  <a class="t-node" href="#v-ideas" data-vi="4"><span class="t-label">04 · IDEAS</span><span class="t-dot"></span></a>
+  <div class="t-count">1/5</div>
+</aside>
+
+<span class="tagline">DIFFERENT PATHS · SAME CURIOSITY</span>
+<span class="kbd-hint">← → NAVIGATE · ESC HOME</span>
+
+<div id="pager" role="navigation" aria-label="Pager">
+  <button class="pg-btn" id="pg-prev" aria-label="Previous view">‹</button>
+  <span id="pg-label">00 · ORIGIN</span>
+  <button class="pg-btn" id="pg-next" aria-label="Next view">›</button>
+</div>
+
+<main class="stage">
+
+  <!-- ============ 01 UNDERSTAND ============ -->
+  <section class="view" id="v-understand">
+    <div class="dim">
+      <div class="dim-path" aria-hidden="true">
+        <svg viewBox="0 0 400 800" fill="none" preserveAspectRatio="xMidYMid slice">
+          <path d="M-40 700 C 120 560, 260 380, 420 120" stroke="#1b2230" stroke-width="1"/>
+          <circle cx="82" cy="592" r="2.6" fill="#e6be6a" opacity=".8"/>
+          <circle cx="82" cy="592" r="14" fill="#e6be6a" opacity=".07"/>
+        </svg>
+      </div>
+      <div class="dim-head">
+        <span class="ghost" aria-hidden="true">01</span>
+        <div class="eyebrow vf" style="--i:0">Dimension 01</div>
+        <h2 class="dim-title vf" style="--i:1">UNDERSTAND</h2>
+        <p class="dim-sub vf" style="--i:2">Science &amp; Analysis</p>
+        <p class="dim-frame vf" style="--i:3">How I take a complex system <em>apart</em> — carefully, end to end.</p>
+        <p class="dim-hint vf" style="--i:4">CLICK AN ITEM TO EXPAND</p>
+      </div>
+      <div class="acc">
+
+        <details class="item vf" style="--i:2" name="d1">
+          <summary class="item-head">
+            <span class="item-idx">A</span>
+            <span class="item-main">
+              <span class="item-title">Sleep-Dependent Plasticity in Mouse S1</span>
+              <span class="item-teaser">Master's thesis · Larkum Lab, Charité</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">Question</span>
+              <p>How does sleep reshape neural circuits in the somatosensory cortex — and which sleep states do the work?</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">Approach</span>
+              <p>Two-photon calcium imaging combined with EEG/EMG recording across wake, NREM and REM. Own data acquisition, quality control and analysis design; a standardised processing framework for heterogeneous multi-source data.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">Output</span>
+              <p>An end-to-end MATLAB &amp; Python pipeline — cleaning, statistical modelling, visualisation and written reporting — providing the data basis for project decisions.</p>
+            </div>
+            <div class="d-actions">
+              <span class="mini-btn ghosted">Visualization — coming soon</span>
+            </div>
+          </div>
+        </details>
+
+        <details class="item vf" style="--i:3" name="d1">
+          <summary class="item-head">
+            <span class="item-idx">B</span>
+            <span class="item-main">
+              <span class="item-title">Circadian Rhythm Modelling</span>
+              <span class="item-teaser">B.Sc. thesis · chronobiology, with Prof. Hanspeter Herzel</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">What it was</span>
+              <p>Data analysis and modelling of circadian rhythms — a first full pass from raw biological data to a working quantitative model, and the project that made me want to keep doing this.</p>
+            </div>
+            <div class="d-actions">
+              <a class="mini-btn" href="https://github.com/ZixiTang/ultradian_viz" target="_blank" rel="noopener">Ultradian visualisation — code on GitHub ↗</a>
+            </div>
+          </div>
+        </details>
+
+        <details class="item vf" style="--i:4" name="d1">
+          <summary class="item-head">
+            <span class="item-idx">C</span>
+            <span class="item-main">
+              <span class="item-title">Toolbox</span>
+              <span class="item-teaser">The instruments I actually use</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="chips">
+              <span class="chip">MATLAB</span><span class="chip">Python</span>
+              <span class="chip">Statistical testing</span><span class="chip">Data cleaning</span>
+              <span class="chip">Visualisation</span><span class="chip">Git</span>
+              <span class="chip">Two-photon imaging</span><span class="chip">EEG/EMG signal processing</span>
+              <span class="chip">Experimental design</span>
+            </div>
+          </div>
+        </details>
+
+        <a class="item item-link vf" style="--i:5" href="https://github.com/ZixiTang" target="_blank" rel="noopener">
+          <span class="item-head">
+            <span class="item-idx">D</span>
+            <span class="item-main">
+              <span class="item-title">GitHub</span>
+              <span class="item-teaser">Code lives here</span>
+            </span>
+            <span class="item-x">↗</span>
+          </span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 BUILD ============ -->
+  <section class="view" id="v-build">
+    <div class="dim">
+      <div class="dim-path" aria-hidden="true">
+        <svg viewBox="0 0 400 800" fill="none" preserveAspectRatio="xMidYMid slice">
+          <path d="M-40 700 C 120 560, 260 380, 420 120" stroke="#1b2230" stroke-width="1"/>
+          <circle cx="190" cy="440" r="2.6" fill="#e6be6a" opacity=".85"/>
+          <circle cx="190" cy="440" r="14" fill="#e6be6a" opacity=".08"/>
+        </svg>
+      </div>
+      <div class="dim-head">
+        <span class="ghost" aria-hidden="true">02</span>
+        <div class="eyebrow vf" style="--i:0">Dimension 02</div>
+        <h2 class="dim-title vf" style="--i:1">BUILD</h2>
+        <p class="dim-sub vf" style="--i:2">AI · Product · Technology</p>
+        <p class="dim-frame vf" style="--i:3">What I <em>make</em> with what I learn.</p>
+        <p class="dim-hint vf" style="--i:4">CLICK AN ITEM TO EXPAND</p>
+      </div>
+      <div class="acc">
+
+        <details class="item vf" style="--i:2" name="d2">
+          <summary class="item-head">
+            <span class="item-idx">A</span>
+            <span class="item-main">
+              <span class="item-title">Delay Garden 延迟花园</span>
+              <span class="item-teaser">A pixel game for training delayed gratification</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">Problem</span>
+              <p>Focus tools measure time spent — not whether the attention was any good, and not whether you can wait for a reward.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">What I built</span>
+              <p>A pixel-style game around delayed reward: Pomodoro focus sessions and task tracking feed an AI model that evaluates each session — the garden only grows when the attention was real.</p>
+            </div>
+            <div class="d-actions">
+              <a class="mini-btn" href="delay-garden.html" target="_blank">Open the game ↗</a>
+            </div>
+          </div>
+        </details>
+
+        <details class="item vf" style="--i:3" name="d2">
+          <summary class="item-head">
+            <span class="item-idx">B</span>
+            <span class="item-main">
+              <span class="item-title">cheng Bau Website Redesign</span>
+              <span class="item-teaser">Full redesign demo for a Berlin construction firm</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">Problem</span>
+              <p>A planning-and-construction company whose web presence didn't match the quality of its work.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">What I built</span>
+              <p>A single-file, zero-dependency German site — De Stijl × industrial aluminium × neo-Chinese aesthetics (moon gate, shanshui), no trackers, no external CDNs, privacy by design. Currently in discussion with the client.</p>
+            </div>
+            <div class="d-actions">
+              <a class="mini-btn" href="cheng-bau-demo.html" target="_blank">View demo ↗</a>
+            </div>
+          </div>
+        </details>
+
+        <details class="item vf" style="--i:4" name="d2">
+          <summary class="item-head">
+            <span class="item-idx">C</span>
+            <span class="item-main">
+              <span class="item-title">AI Research Workflow</span>
+              <span class="item-teaser">Zotero + Claude + Obsidian, literature → writing</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">Problem</span>
+              <p>Academic reading, synthesis and writing live in disconnected tools — the friction kills momentum.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">What I built</span>
+              <p>One connected workflow from literature → synthesis → analysis → writing. Less context-switching, more thinking.</p>
+            </div>
+            <div class="d-actions">
+              <a class="mini-btn" href="research-workflow.pdf" target="_blank">Read the write-up (PDF) ↗</a>
+            </div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 EXPERIMENT ============ -->
+  <section class="view" id="v-experiment">
+    <div class="dim">
+      <div class="dim-path" aria-hidden="true">
+        <svg viewBox="0 0 400 800" fill="none" preserveAspectRatio="xMidYMid slice">
+          <path d="M-40 700 C 120 560, 260 380, 420 120" stroke="#1b2230" stroke-width="1"/>
+          <circle cx="310" cy="272" r="2.6" fill="#e6be6a" opacity=".9"/>
+          <circle cx="310" cy="272" r="14" fill="#e6be6a" opacity=".09"/>
+        </svg>
+      </div>
+      <div class="dim-head">
+        <span class="ghost" aria-hidden="true">03</span>
+        <div class="eyebrow vf" style="--i:0">Dimension 03</div>
+        <h2 class="dim-title vf" style="--i:1">EXPERIMENT</h2>
+        <p class="dim-sub vf" style="--i:2">Culture · Business · Human Behavior</p>
+        <p class="dim-frame vf" style="--i:3">Where I test ideas against <em>reality</em>.</p>
+        <p class="dim-hint vf" style="--i:4">CLICK AN ITEM TO EXPAND</p>
+      </div>
+      <div class="acc">
+
+        <details class="item vf" style="--i:2" name="d3">
+          <summary class="item-head">
+            <span class="item-idx">A</span>
+            <span class="item-main">
+              <span class="item-title">Chinese Lacquer Marbling Studio</span>
+              <span class="item-teaser">Founder · craft brand run single-handedly</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">The brand</span>
+              <p>"Eastern aesthetics you can carry" — five product categories (folding fans, canvas bags, phone cases and more) under one visual language and price band, built from scratch.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">The channels</span>
+              <p>Every channel opened independently: the Mid-Autumn Gala hosted by the Chinese Embassy, China Festival Frankfurt 2024, the Jena cultural festival and Berlin markets — six events, with repeat business mainly by word of mouth.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">The experience</span>
+              <p>Costume, storytelling and hands-on craft combined into one on-site experience, for audiences across ages and cultural backgrounds.</p>
+            </div>
+            <div class="d-actions">
+              <a class="mini-btn" href="lacquer-portfolio.pdf" target="_blank">Portfolio (PDF) ↗</a>
+            </div>
+          </div>
+        </details>
+
+        <details class="item vf" style="--i:3" name="d3">
+          <summary class="item-head">
+            <span class="item-idx">B</span>
+            <span class="item-main">
+              <span class="item-title">Stage &amp; Performance</span>
+              <span class="item-teaser">Singing, musical theatre, cultural reenactment · by invitation</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">Stages</span>
+              <p>Consulate and Embassy receptions, the Chinese Cultural Centre, the Duisburg China Fest — from classical folk songs to full stage productions.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">Highlights</span>
+              <p>The guqin song Feng Qiu Huang 凤求凰 at a consulate business reception; the musical "The Legend of the White Snake" at the Duisburg China Fest; a Song-dynasty painting reenactment at the Chinese Cultural Centre.</p>
+            </div>
+            <div class="gallery">
+              <a href="stage-feng-qiu-huang.jpg" target="_blank"><img src="stage-feng-qiu-huang.jpg" alt="Singing Feng Qiu Huang with guqin accompaniment at a consulate reception" loading="lazy"><span class="gcap">凤求凰 · Consulate reception</span></a>
+              <a href="stage-white-snake.jpg" target="_blank"><img src="stage-white-snake.jpg" alt="Performing in the musical The Legend of the White Snake at the Duisburg China Fest" loading="lazy"><span class="gcap">白蛇传 · Duisburg China Fest</span></a>
+              <a href="stage-song-painting.jpg" target="_blank"><img src="stage-song-painting.jpg" alt="Song-dynasty painting reenactment at the Chinese Cultural Centre" loading="lazy"><span class="gcap">宋画还原 · Cultural Centre</span></a>
+            </div>
+          </div>
+        </details>
+
+        <details class="item vf" style="--i:4" name="d3">
+          <summary class="item-head">
+            <span class="item-idx">C</span>
+            <span class="item-main">
+              <span class="item-title">Hanfu &amp; Cultural Design</span>
+              <span class="item-teaser">Costume and styling for cultural festivals</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">Where</span>
+              <p>Multiple appearances at Karneval der Kulturen and cultural events — costume and styling as part of the studio's storytelling.</p>
+            </div>
+            <div class="d-row">
+              <span class="d-label">Highlight</span>
+              <p>A self-designed Water Dragon deity look 水龙神 — headpiece, dragon and full styling — created for Karneval der Kulturen.</p>
+            </div>
+            <div class="gallery g1">
+              <a href="hanfu-water-dragon.jpg" target="_blank"><img src="hanfu-water-dragon.jpg" alt="Self-designed Water Dragon deity costume at Karneval der Kulturen" loading="lazy"><span class="gcap">水龙神 · Self-designed, Karneval der Kulturen</span></a>
+            </div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 IDEAS ============ -->
+  <section class="view" id="v-ideas">
+    <div class="dim">
+      <div class="dim-path" aria-hidden="true">
+        <svg viewBox="0 0 400 800" fill="none" preserveAspectRatio="xMidYMid slice">
+          <path d="M-40 700 C 120 560, 260 380, 420 120" stroke="#1b2230" stroke-width="1"/>
+          <circle cx="392" cy="166" r="3" fill="#e6be6a"/>
+          <circle cx="392" cy="166" r="30" fill="#e6be6a" opacity=".12"/>
+        </svg>
+      </div>
+      <div class="dim-head">
+        <span class="ghost" aria-hidden="true">04</span>
+        <div class="eyebrow vf" style="--i:0">Dimension 04</div>
+        <h2 class="dim-title vf" style="--i:1">IDEAS</h2>
+        <p class="dim-sub vf" style="--i:2">Things I keep thinking about</p>
+        <p class="dim-frame vf" style="--i:3">Different paths. <em>Same curiosity.</em></p>
+        <div class="contact-strip vf" style="--i:4">
+          <a class="mini-btn" href="mailto:tangzixi.rosalie@gmail.com">Email</a>
+          <a class="mini-btn" href="TangZixi-CV-EN.pdf" target="_blank">CV (PDF)</a>
+          <a class="mini-btn" href="https://www.linkedin.com/in/zixi-tang-648497333/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="mini-btn" href="https://github.com/ZixiTang" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <div class="acc">
+
+        <details class="item vf" style="--i:2" name="d4">
+          <summary class="item-head">
+            <span class="item-idx">A</span>
+            <span class="item-main">
+              <span class="item-title">Go Back to Your Real Life</span>
+              <span class="item-teaser">Product concept</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">The idea</span>
+              <p>A social product where users first see only text instructions, complete the experience in the real world, upload proof — and only then unlock how others lived it. One-dimensional input, full-dimensional life: taking back originality from a compressed, second-hand online existence.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="item vf" style="--i:3" name="d4">
+          <summary class="item-head">
+            <span class="item-idx">B</span>
+            <span class="item-main">
+              <span class="item-title">Creative Markets &amp; Price Collapse</span>
+              <span class="item-teaser">Market observation</span>
+            </span>
+            <span class="item-x">+</span>
+          </summary>
+          <div class="item-detail">
+            <div class="d-row">
+              <span class="d-label">The observation</span>
+              <p>Low-barrier creative markets drift into price competition, weak professional support and creator burnout. An open platform with transparent pricing and real support structures could change the equilibrium.</p>
+            </div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 00 HOME (last in DOM so CSS can hide it when another view is targeted) ============ -->
+  <section class="view" id="v-home">
+    <div class="home-inner">
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 800 640" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#e6be6a" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#e6be6a" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <path id="p1" d="M-40 60 C 240 120, 420 220, 588 316" stroke="#222a3a" stroke-width="1"/>
+          <path id="p2" d="M-40 220 C 220 240, 430 280, 588 316" stroke="#222a3a" stroke-width="1"/>
+          <path id="p3" d="M-40 420 C 230 400, 440 350, 588 316" stroke="#222a3a" stroke-width="1"/>
+          <path id="p4" d="M-40 600 C 260 540, 460 410, 588 316" stroke="#222a3a" stroke-width="1"/>
+          <path id="p5" d="M160 -30 C 300 90, 480 220, 588 316" stroke="#1b2230" stroke-width="1"/>
+          <path id="p6" d="M80 680 C 300 620, 500 440, 588 316" stroke="#1b2230" stroke-width="1"/>
+          <circle cx="588" cy="316" r="60" fill="url(#glow)" opacity=".55"/>
+          <circle cx="588" cy="316" r="3" fill="#e6be6a"/>
+          <circle class="mover" r="2.4" fill="#e6be6a" opacity=".9">
+            <animateMotion dur="10s" repeatCount="indefinite" rotate="none"><mpath href="#p1"/></animateMotion>
+          </circle>
+          <circle class="mover" r="2" fill="#e6be6a" opacity=".65">
+            <animateMotion dur="14s" begin="3s" repeatCount="indefinite" rotate="none"><mpath href="#p4"/></animateMotion>
+          </circle>
+          <circle class="mover" r="1.6" fill="#8b93a5" opacity=".55">
+            <animateMotion dur="17s" begin="7s" repeatCount="indefinite" rotate="none"><mpath href="#p3"/></animateMotion>
+          </circle>
+        </svg>
+      </div>
+
+      <div class="hero-content">
+        <div class="eyebrow vf" style="--i:0">Berlin · Biophysics MSc</div>
+        <h1 id="hero-name" class="vf" style="--i:1">ZIXI&nbsp;TANG</h1>
+        <p class="hero-statement vf" style="--i:2">
+          I explore complex systems.<br>
+          Then I <em>build</em> with what I find.
+        </p>
+        <p class="hero-meta vf" style="--i:3">AI · Product · Science · Creative Experiments</p>
+        <div class="hero-actions vf" style="--i:4">
+          <a class="btn btn-primary" href="#v-understand">Explore my work</a>
+          <a class="btn" href="TangZixi-CV-EN.pdf" target="_blank">CV</a>
+          <a class="btn" href="https://github.com/ZixiTang" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/zixi-tang-648497333/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="portals">
+        <a class="portal vf" style="--i:5" href="#v-understand">
+          <span class="portal-num">01</span>
+          <h3>UNDERSTAND</h3>
+          <p class="portal-sub">Science &amp; Analysis</p>
+          <span class="portal-go"><span>4 ITEMS</span><span>ENTER →</span></span>
+        </a>
+        <a class="portal vf" style="--i:6" href="#v-build">
+          <span class="portal-num">02</span>
+          <h3>BUILD</h3>
+          <p class="portal-sub">AI · Product · Technology</p>
+          <span class="portal-go"><span>3 ITEMS</span><span>ENTER →</span></span>
+        </a>
+        <a class="portal vf" style="--i:7" href="#v-experiment">
+          <span class="portal-num">03</span>
+          <h3>EXPERIMENT</h3>
+          <p class="portal-sub">Culture · Business · Human Behavior</p>
+          <span class="portal-go"><span>3 ITEMS</span><span>ENTER →</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Everything below is progressive enhancement — the site is fully usable without it.
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer: fine)').matches;
+
+  // ================= hash sync: tracker, pager, convergence =================
+  const ORDER = ['', 'v-understand', 'v-build', 'v-experiment', 'v-ideas'];
+  const LABELS = ['00 · ORIGIN', '01 · UNDERSTAND', '02 · BUILD', '03 · EXPERIMENT', '04 · IDEAS'];
+  const tNodes = [...document.querySelectorAll('#tracker .t-node')];
+  const tCount = document.querySelector('#tracker .t-count');
+  const pgLabel = document.getElementById('pg-label');
+  const pgPrev = document.getElementById('pg-prev');
+  const pgNext = document.getElementById('pg-next');
+  const visited = new Set();
+
+  function curIdx() {
+    const i = ORDER.indexOf(location.hash.slice(1));
+    return i < 0 ? 0 : i;
+  }
+  function sync() {
+    const idx = curIdx();
+    tNodes.forEach((n, i) => n.classList.toggle('active', i === idx));
+    pgLabel.textContent = LABELS[idx];
+    pgPrev.disabled = idx === 0;
+    pgNext.disabled = idx === ORDER.length - 1;
+    if (!visited.has(idx)) {
+      visited.add(idx);
+      tNodes[idx].classList.add('visited');
+      tCount.textContent = visited.size + '/5';
+      if (visited.size === ORDER.length) {
+        tCount.textContent = 'CONVERGED';
+        document.body.classList.add('converged');
+      }
+    }
+  }
+  addEventListener('hashchange', sync);
+  sync();
+
+  function goIdx(i) { location.hash = ORDER[i]; }
+  pgPrev.addEventListener('click', () => { const i = curIdx(); if (i > 0) goIdx(i - 1); });
+  pgNext.addEventListener('click', () => { const i = curIdx(); if (i < ORDER.length - 1) goIdx(i + 1); });
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const i = curIdx();
+    if (e.key === 'ArrowRight' && i < ORDER.length - 1) goIdx(i + 1);
+    else if (e.key === 'ArrowLeft' && i > 0) goIdx(i - 1);
+    else if (e.key === 'Escape') location.hash = '';
+  });
+
+  // ================= exclusive accordion fallback (older browsers without details name=) =================
+  document.querySelectorAll('details.item').forEach(d => {
+    d.addEventListener('toggle', () => {
+      if (!d.open) return;
+      d.closest('.acc').querySelectorAll('details.item[open]').forEach(o => {
+        if (o !== d) o.open = false;
+      });
+    });
+  });
+
+  // ================= name decode =================
+  if (!reduced) {
+    const el = document.getElementById('hero-name');
+    const finalText = 'ZIXI\u00A0TANG';
+    const pool = 'ABCDEFGHIKLMNOPRSTUVXYZ01░▒▓';
+    let frame = 0; const total = 30;
+    const tick = () => {
+      frame++;
+      const solved = Math.floor((frame / total) * finalText.length);
+      let out = '';
+      for (let i = 0; i < finalText.length; i++) {
+        if (finalText[i] === '\u00A0') { out += '\u00A0'; continue; }
+        out += i < solved ? finalText[i] : pool[Math.floor(Math.random() * pool.length)];
+      }
+      el.textContent = out;
+      if (frame < total) setTimeout(tick, 36);
+      else el.textContent = finalText;
+    };
+    setTimeout(tick, 380);
+  }
+
+  // ================= cursor light =================
+  if (fine && !reduced) {
+    const light = document.getElementById('cursor-light');
+    addEventListener('mousemove', e => {
+      document.body.classList.add('has-cursor');
+      light.style.transform = `translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`;
+    }, { passive: true });
+  }
+
+  // ================= magnetic hero buttons =================
+  if (fine && !reduced) {
+    document.querySelectorAll('.hero-actions .btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        btn.style.transform =
+          `translate(${(e.clientX - r.left - r.width / 2) / r.width * 6}px,` +
+          `${(e.clientY - r.top - r.height / 2) / r.height * 5}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+  }
+
+  // ================= tilt on portals =================
+  if (fine && !reduced) {
+    document.querySelectorAll('.portal').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const rx = ((e.clientY - r.top) / r.height - .5) * -4;
+        const ry = ((e.clientX - r.left) / r.width - .5) * 4;
+        card.style.transform = `perspective(720px) translateY(-4px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+</script>
+
+</body>
+</html>

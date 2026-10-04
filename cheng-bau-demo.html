@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>cheng Bau GmbH | Planen und Bauen aus einer Hand · Berlin</title>
+<meta name="description" content="cheng Bau GmbH – Berliner Planungsbüro und Bauunternehmen seit 2010. Hausbau, Altbausanierung, Fassaden-Wärmedämmverbundsysteme und Mauerwerkstrockenlegung. Planen und Bauen aus einer Hand.">
+
+<!--
+  =====================================================================
+  cheng Bau GmbH – Homepage Demo v2 (Single File, Zero Dependencies)
+  Ästhetik: De Stijl × Industrie-Aluminiumprofil × Neo-chinesisch (Mondtor/Shanshui).
+  Farbsystem strikt nach der "Industrial Architecture Palette".
+  Nur Google Fonts extern – sonst KEINE Drittanbieter, keine Tracker,
+  keine externen Bild-/Karten-CDNs (Datenschutz by Design).
+  =====================================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ============ 1. DESIGN TOKENS (Palette 1:1 aus der Farbkarte) ============ */
+:root{
+  --olive:#D3D4A7;  --olive-soft:#DDE0BE; --olive-pale:#ECEDE0; --olive-deep:#B4B786;
+  --steel:#5E8FBD;  --steel-soft:#B9CBDB; --steel-pale:#D7E1EB; --steel-deep:#4a7aa6;
+  --beige:#E8E4D5;  --beige-pale:#F4F1E6;
+  --brass:#BB8936;  --brass-deep:#9a6f24;
+  --orange:#EB663A; --orange-deep:#d8521f;
+  --graphite:#2F3538; --graphite-soft:#444B4F; --graphite-mute:#596063;
+  --ink:var(--graphite); --bg:var(--beige);
+  --hairline:rgba(47,53,56,.14); --hairline-brass:rgba(187,137,54,.55);
+  --maxw:1180px; --rad:2px; --ease:cubic-bezier(.22,.61,.36,1);
+  --f-display:'Archivo','DIN Next','Noto Sans SC',system-ui,sans-serif;
+  --f-body:'Noto Sans SC','Archivo',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; overflow-x:hidden}
+body{margin:0; font-family:var(--f-body); color:var(--ink); background:var(--bg); line-height:1.6;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow-x:hidden}
+img,svg{display:block; max-width:100%}
+a{color:inherit; text-decoration:none}
+button{font:inherit; cursor:pointer; border:0; background:none; color:inherit}
+h1,h2,h3{font-family:var(--f-display); font-weight:800; line-height:1.04; letter-spacing:-.01em; margin:0}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(18px,5vw,40px)}
+
+.eyebrow{font-family:var(--f-display); font-weight:700; font-size:12px; letter-spacing:.26em;
+  text-transform:uppercase; color:var(--brass-deep); display:inline-flex; align-items:center; gap:.6em}
+.eyebrow::before{content:""; width:26px; height:2px; background:var(--brass); display:inline-block}
+
+.regmark{position:absolute; width:14px; height:14px; pointer-events:none; opacity:.5; z-index:1}
+.regmark::before,.regmark::after{content:""; position:absolute; background:var(--brass)}
+.regmark::before{left:50%; top:0; width:1.5px; height:100%; transform:translateX(-50%)}
+.regmark::after{top:50%; left:0; height:1.5px; width:100%; transform:translateY(-50%)}
+.regmark.tl{top:14px; left:14px}.regmark.tr{top:14px; right:14px}
+.regmark.bl{bottom:14px; left:14px}.regmark.br{bottom:14px; right:14px}
+
+.skip{position:absolute; left:-999px; top:0; background:var(--graphite); color:#fff; padding:10px 16px; z-index:300}
+.skip:focus{left:8px; top:8px}
+:focus-visible{outline:2.5px solid var(--orange); outline-offset:3px}
+
+/* ============ 2. HEADER (transparent über dem Cover, fest danach) ============ */
+.site-head{position:fixed; top:0; left:0; right:0; z-index:120;
+  background:color-mix(in srgb,var(--beige) 90%, transparent); backdrop-filter:saturate(1.4) blur(8px);
+  border-bottom:1px solid var(--hairline); transition:background .35s, border-color .35s}
+.nav{display:flex; align-items:center; gap:16px; height:66px}
+.brand{display:flex; align-items:baseline; gap:9px; font-family:var(--f-display); font-weight:900; font-size:20px; letter-spacing:-.02em; transition:color .35s}
+.brand .gmbh{font-weight:500; font-size:11px; letter-spacing:.18em; color:var(--graphite-mute); text-transform:uppercase}
+.brand .mark{width:12px; height:21px; background:var(--orange); display:inline-block; clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)}
+.nav-links{display:flex; gap:2px; margin-left:auto}
+.nav-links a{padding:8px 12px; font-weight:500; font-size:14.5px; border-radius:var(--rad); color:var(--graphite-soft); transition:color .25s,background .25s}
+.nav-links a:hover{color:var(--graphite); background:var(--olive-pale)}
+.lang{display:flex; border:1px solid var(--hairline); border-radius:var(--rad); overflow:hidden; margin-left:6px}
+.lang button{padding:7px 9px; font-family:var(--f-display); font-weight:600; font-size:12px; letter-spacing:.05em; color:var(--graphite-mute); transition:color .25s}
+.lang button[aria-pressed="true"]{background:var(--graphite); color:var(--beige-pale)}
+.burger{margin-left:auto; display:none; width:42px; height:42px; align-items:center; justify-content:center; border:1px solid var(--hairline); border-radius:var(--rad)}
+.burger span,.burger span::before,.burger span::after{content:""; display:block; width:18px; height:2px; background:var(--graphite); position:relative; transition:.25s}
+.burger span::before{position:absolute; top:-6px}.burger span::after{position:absolute; top:6px}
+/* transparenter Zustand (über dem dunklen Cover) */
+.site-head.transparent{background:transparent; border-color:transparent}
+.site-head.transparent .brand{color:var(--beige-pale)}
+.site-head.transparent .nav-links a{color:#dfe2d6}
+.site-head.transparent .nav-links a:hover{color:#fff; background:rgba(255,255,255,.12)}
+.site-head.transparent .lang{border-color:rgba(255,255,255,.3)}
+.site-head.transparent .lang button{color:#cfd3c4}
+.site-head.transparent .lang button[aria-pressed="true"]{background:var(--beige-pale); color:var(--graphite)}
+.site-head.transparent .burger{border-color:rgba(255,255,255,.4)}
+.site-head.transparent .burger span,.site-head.transparent .burger span::before,.site-head.transparent .burger span::after{background:#fff}
+
+/* ============ 3. COVER / OPENING (De Stijl × Aluminiumprofil × Mondtor) ============
+   Mondrian-Raster, dessen "Linien" Stahlblau-Aluprofile sind; an den Kreuzungen
+   sitzen orange Knotenblöcke (Profil-Verbinder wie bei den Referenzmöbeln).
+   Der einzige Kreis – das Mondtor – bricht die Orthogonalität und rahmt ein Shanshui. */
+.cover{position:relative; background:var(--graphite); height:100svh; min-height:600px; padding-top:66px}
+.cover-grid{display:grid; gap:8px; padding:8px; height:100%; background:var(--steel);
+  grid-template-columns:1.55fr .9fr 1.15fr; grid-template-rows:74px 1fr 96px;
+  grid-template-areas:"head head art" "main accent art" "main foot art"}
+.cv{position:relative; overflow:hidden; border-radius:1px; opacity:0; transform:translateY(16px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease)}
+.cover.lit .cv{opacity:1; transform:none}
+.cv-head{grid-area:head; background:var(--graphite); display:flex; align-items:center; padding:0 26px; transition-delay:.05s}
+.cv-head .eyebrow{color:var(--olive-deep)} .cv-head .eyebrow::before{background:var(--olive-deep)}
+.cv-main{grid-area:main; background:var(--beige); padding:clamp(24px,4vw,46px); display:flex; flex-direction:column; justify-content:flex-end; transition-delay:.15s}
+.cv-main .kicker{font-family:var(--f-display); font-weight:700; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--brass-deep); margin-bottom:auto}
+.cv-wordmark{font-family:var(--f-display); font-weight:900; font-size:clamp(40px,7vw,86px); line-height:.92; letter-spacing:-.02em; color:var(--graphite); text-transform:uppercase}
+.cv-slogan{font-family:var(--f-display); font-weight:700; font-size:clamp(17px,2.4vw,26px); color:var(--graphite-soft); margin-top:14px}
+.cv-slogan b{color:var(--orange)}
+.cv-cta{display:inline-flex; align-items:center; gap:9px; align-self:flex-start; margin-top:22px;
+  background:var(--orange); color:#fff; font-family:var(--f-display); font-weight:700; font-size:15px; padding:13px 22px; border-radius:var(--rad); transition:transform .15s var(--ease),background .2s}
+.cv-cta:hover{background:var(--orange-deep); transform:translateY(-2px)}
+.cv-accent{grid-area:accent; background:var(--orange); display:flex; align-items:center; justify-content:center; transition-delay:.25s}
+.cv-zh{writing-mode:vertical-rl; font-family:var(--f-body); font-weight:500; font-size:clamp(20px,2.6vw,30px); letter-spacing:.26em; line-height:1.7; color:#fff}
+.cv-foot{grid-area:foot; background:var(--olive); display:flex; align-items:center; justify-content:space-between; padding:0 22px; transition-delay:.32s}
+.cv-foot .seit{font-family:var(--f-display); font-weight:800; font-size:14px; letter-spacing:.04em; color:var(--graphite)}
+.scroll-cue{display:flex; align-items:center; gap:10px; font-family:var(--f-display); font-weight:600; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--graphite-soft)}
+.scroll-cue .ln{width:30px; height:2px; background:var(--graphite); position:relative; overflow:hidden}
+.scroll-cue .ln::after{content:""; position:absolute; inset:0; background:var(--orange); animation:scan 1.8s var(--ease) infinite}
+@keyframes scan{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+.cv-art{grid-area:art; background:var(--graphite); transition-delay:.1s}
+.cv-art svg{width:100%; height:100%}
+/* orange Profil-Knoten an den Rasterkreuzungen (De-Stijl-Akzent) */
+.cv-node{position:absolute; width:15px; height:15px; background:var(--orange); z-index:6; opacity:0; transition:opacity .5s ease .5s}
+.cover.lit .cv-node{opacity:1}
+.cv-node.n1{left:calc(1.55/3.6*100% + 4px); top:70px} /* nur dekorativ – exakte Lage unkritisch */
+
+/* --- Mondtor-SVG-Animationen --- */
+.g-ring{stroke-dasharray:1430; stroke-dashoffset:1430; transition:stroke-dashoffset 1.5s var(--ease) .25s}
+.cover.lit .g-ring{stroke-dashoffset:0}
+.g-mtn{opacity:0; transform:translateY(22px); transform-box:fill-box; transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.cover.lit .g-mtn{opacity:1; transform:none}
+.cover.lit .g-mtn.g-mid{transition-delay:.12s}.cover.lit .g-mtn.g-near{transition-delay:.24s}
+.g-sun{opacity:0; transform:scale(.4); transform-box:fill-box; transform-origin:center; transition:opacity .9s ease .5s, transform .9s var(--ease) .5s}
+.cover.lit .g-sun{opacity:1; transform:none}
+.g-branch path{stroke-dasharray:760; stroke-dashoffset:760; transition:stroke-dashoffset 1.4s var(--ease) .95s}
+.cover.lit .g-branch path{stroke-dashoffset:0}
+.g-branch circle{opacity:0; transition:opacity .4s ease 1.7s}
+.cover.lit .g-branch circle{opacity:1}
+.g-dim{opacity:0; transition:opacity .7s ease 1.95s}
+.cover.lit .g-dim{opacity:.85}
+
+/* ============ 4. SECTION SHELL ============ */
+section{position:relative}
+.sec-pad{padding:clamp(58px,9vw,108px) 0}
+.sec-head{max-width:64ch; margin-bottom:clamp(30px,5vw,52px)}
+.sec-head h2{font-size:clamp(28px,4.4vw,46px); margin-top:14px}
+.sec-head p{color:var(--graphite-soft); font-size:clamp(15px,1.9vw,18px); margin:14px 0 0}
+.reveal{opacity:0; transform:translateY(26px); transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1; transform:none}
+
+/* ============ 5. UNTERNEHMEN (Original-Text + Registerdaten + Prozess) ============ */
+#unternehmen{background:var(--beige-pale); border-bottom:1px solid var(--hairline)}
+.unt-grid{display:grid; grid-template-columns:1.25fr .75fr; gap:clamp(28px,5vw,56px); align-items:start}
+.unt-grid>*{min-width:0}
+.unt-body p{font-size:clamp(15px,1.9vw,18px); color:var(--graphite-soft); margin:0 0 16px; max-width:60ch}
+.unt-body .lead-strong{color:var(--graphite); font-weight:500}
+.proc{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:30px}
+.proc .step{position:relative; background:#fff; border:1px solid var(--hairline); border-top:3px solid var(--steel); border-radius:var(--rad); padding:18px 16px}
+.proc .step:nth-child(2){border-top-color:var(--brass)} .proc .step:nth-child(3){border-top-color:var(--orange)}
+.proc .step .n{font-family:var(--f-display); font-weight:800; font-size:12px; letter-spacing:.16em; color:var(--brass-deep)}
+.proc .step h4{font-family:var(--f-display); font-size:16px; margin:8px 0 4px}
+.proc .step p{font-size:13px; color:var(--graphite-soft); margin:0}
+/* Registerkarte (aus v1 übernommen) */
+.fact-card{position:relative; background:var(--graphite); color:var(--beige-pale); border-radius:var(--rad); padding:26px}
+.fact-card .stamp{font-family:var(--f-display); font-weight:700; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--olive-deep)}
+.fact-card h3{font-size:19px; margin:10px 0 14px; color:#fff}
+.fact-row{display:flex; justify-content:space-between; gap:14px; padding:11px 0; border-top:1px solid rgba(255,255,255,.13); font-size:14px}
+.fact-row span:first-child{color:var(--steel-soft)} .fact-row span:last-child{font-family:var(--f-display); font-weight:600; text-align:right}
+.fact-card .seit{position:absolute; top:-13px; right:18px; background:var(--brass); color:#1c1407; font-family:var(--f-display); font-weight:800; font-size:12px; letter-spacing:.06em; padding:5px 11px; border-radius:var(--rad)}
+
+/* ============ 6. LEISTUNGEN (4 echte Leistungen aus dem Original) ============ */
+#leistungen{background:var(--olive)}
+.leist-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px}
+.leist-card{position:relative; background:var(--beige-pale); border:1px solid var(--hairline); border-radius:var(--rad);
+  padding:30px 28px; overflow:hidden; transition:transform .25s var(--ease),box-shadow .25s, border-color .25s}
+.leist-card::before{content:""; position:absolute; inset:0 auto 0 0; width:4px; background:var(--steel); transform:scaleY(0); transform-origin:top; transition:transform .3s var(--ease)}
+.leist-card:nth-child(2)::before{background:var(--brass)} .leist-card:nth-child(3)::before{background:var(--orange)} .leist-card:nth-child(4)::before{background:var(--steel-deep)}
+.leist-card:hover{transform:translateY(-5px); box-shadow:0 20px 44px -24px rgba(47,53,56,.5); border-color:transparent}
+.leist-card:hover::before{transform:scaleY(1)}
+.leist-num{font-family:var(--f-display); font-weight:800; font-size:13px; letter-spacing:.18em; color:var(--brass-deep)}
+.leist-card h3{font-size:22px; margin:12px 0 4px}
+.leist-tag{font-family:var(--f-display); font-weight:600; font-size:12.5px; letter-spacing:.04em; color:var(--steel-deep); margin-bottom:14px}
+.leist-card:nth-child(2) .leist-tag{color:var(--brass-deep)} .leist-card:nth-child(3) .leist-tag{color:var(--orange-deep)}
+.leist-card p{font-size:14.5px; color:var(--graphite-soft); margin:0}
+.leist-foot{margin-top:26px; font-size:15px; color:var(--graphite-soft); border-top:1px solid var(--hairline); padding-top:20px; max-width:74ch}
+
+/* ============ 7. REFERENZEN + BEFORE/AFTER-SLIDER + echte Projektliste ============ */
+#referenzen{background:var(--beige); border-top:1px solid var(--hairline)}
+.ref-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px}
+.ref-tabs button{padding:9px 16px; font-family:var(--f-display); font-weight:600; font-size:14px; border:1px solid var(--hairline);
+  background:var(--beige-pale); border-radius:var(--rad); color:var(--graphite-soft); transition:.2s}
+.ref-tabs button[aria-selected="true"]{background:var(--graphite); color:var(--beige-pale); border-color:var(--graphite)}
+.ba{position:relative; width:100%; aspect-ratio:16/10; border-radius:var(--rad); overflow:hidden;
+  border:1px solid var(--hairline-brass); background:var(--steel-pale); touch-action:none; user-select:none; -webkit-user-select:none}
+.ba-layer{position:absolute; inset:0} .ba-layer svg{width:100%; height:100%}
+.ba-after{z-index:2; clip-path:inset(0 0 0 50%)}
+.ba-tag{position:absolute; top:14px; z-index:3; font-family:var(--f-display); font-weight:700; font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; padding:6px 11px; border-radius:var(--rad); color:#fff; backdrop-filter:blur(2px)}
+.ba-tag.before{left:14px; background:rgba(47,53,56,.78)} .ba-tag.after{right:14px; background:rgba(235,102,58,.9)}
+.ba-handle{position:absolute; top:0; bottom:0; z-index:4; width:3px; background:var(--orange); transform:translateX(-50%); left:var(--pos,50%); box-shadow:0 0 0 1px rgba(255,255,255,.5)}
+.ba-grip{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%;
+  background:var(--graphite); border:3px solid var(--orange); display:flex; align-items:center; justify-content:center; gap:3px; box-shadow:0 6px 18px -6px rgba(0,0,0,.6); cursor:ew-resize}
+.ba-grip i{width:2px; height:15px; background:var(--orange); border-radius:2px} .ba-grip i:nth-child(2){height:19px} .ba-grip i:nth-child(3){height:15px}
+.ba:focus-within .ba-grip,.ba-grip:active{transform:translate(-50%,-50%) scale(1.06)}
+.ref-caption{display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; margin-top:14px; color:var(--graphite-soft); font-size:14px}
+.ref-caption b{font-family:var(--f-display); color:var(--graphite)}
+/* echte Referenzliste */
+.ref-list{margin-top:42px; border-top:2px solid var(--graphite)}
+.ref-item{display:grid; grid-template-columns:1.4fr 2fr auto; gap:16px; align-items:baseline; padding:16px 4px; border-bottom:1px solid var(--hairline)}
+.ref-item .adr{font-family:var(--f-display); font-weight:700; font-size:15.5px; color:var(--graphite)}
+.ref-item .desc{font-size:14px; color:var(--graphite-soft)}
+.ref-item .qm{font-family:var(--f-display); font-weight:700; font-size:14px; color:var(--brass-deep); white-space:nowrap}
+
+/* ============ 8. GALERIE (datengetrieben + Redaktionsmodus/Upload) ============ */
+#galerie{background:var(--graphite)}
+#galerie .sec-head h2{color:#fff} #galerie .sec-head p{color:var(--steel-soft)}
+#galerie .eyebrow{color:var(--olive-deep)} #galerie .eyebrow::before{background:var(--olive-deep)}
+.sec-bar{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.editbtn{display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,.3); color:#fff; font-family:var(--f-display); font-weight:600; font-size:13px; padding:9px 15px; border-radius:var(--rad); transition:.2s}
+.editbtn:hover{background:rgba(255,255,255,.1)} .editbtn[aria-pressed="true"]{background:var(--orange); border-color:var(--orange)}
+.gal-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:30px}
+.gal-item{position:relative; aspect-ratio:4/3; border-radius:var(--rad); overflow:hidden; background:var(--graphite-soft); cursor:pointer; border:1px solid rgba(255,255,255,.08)}
+.gal-item svg,.gal-item img{width:100%; height:100%; object-fit:cover; transition:transform .4s var(--ease)}
+.gal-item:hover svg,.gal-item:hover img{transform:scale(1.05)}
+.gal-cap{position:absolute; left:0; right:0; bottom:0; padding:18px 12px 10px; font-family:var(--f-display); font-weight:600; font-size:12.5px; color:#fff;
+  background:linear-gradient(transparent,rgba(20,23,24,.85))}
+/* Editor / Upload */
+.editor{display:none; margin-top:24px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.14); border-radius:var(--rad); padding:20px}
+.editor.open{display:block}
+.editor h4{font-family:var(--f-display); color:#fff; margin:0 0 12px; font-size:15px}
+.editor label{display:block; font-size:12.5px; color:var(--steel-soft); margin:10px 0 5px; font-family:var(--f-display); letter-spacing:.04em}
+.editor input,.editor textarea,.editor select{width:100%; padding:10px 12px; border-radius:var(--rad); border:1px solid rgba(255,255,255,.2); background:rgba(0,0,0,.25); color:#fff; font:inherit; font-size:14px}
+.editor .file{padding:9px}
+.editor .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.editor .save{margin-top:14px; background:var(--orange); color:#fff; font-family:var(--f-display); font-weight:700; padding:11px 20px; border-radius:var(--rad)}
+.editor .save:hover{background:var(--orange-deep)}
+.editor .hint{font-size:12px; color:var(--graphite-mute); margin-top:10px}
+
+/* Lightbox */
+.lightbox{position:fixed; inset:0; z-index:200; background:rgba(20,23,24,.92); display:none; align-items:center; justify-content:center; padding:28px}
+.lightbox.open{display:flex}
+.lb-inner{max-width:900px; width:100%}
+.lb-stage{background:var(--graphite-soft); border-radius:var(--rad); overflow:hidden; aspect-ratio:4/3}
+.lb-stage svg,.lb-stage img{width:100%; height:100%; object-fit:cover}
+.lb-cap{color:#fff; font-family:var(--f-display); font-weight:600; margin-top:14px; display:flex; justify-content:space-between; gap:16px; align-items:center}
+.lb-nav button{color:#fff; border:1px solid rgba(255,255,255,.3); width:42px; height:42px; border-radius:var(--rad); font-size:18px; margin-left:8px}
+.lb-nav button:hover{background:rgba(255,255,255,.12)}
+.lb-close{position:absolute; top:18px; right:20px; color:#fff; font-size:26px; width:44px; height:44px; border:1px solid rgba(255,255,255,.3); border-radius:var(--rad)}
+
+/* ============ 9. AKTUELLES / NEWS (datengetrieben + Redaktionsmodus) ============ */
+#aktuelles{background:var(--beige-pale); border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline)}
+.news-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:30px}
+.news-card{background:#fff; border:1px solid var(--hairline); border-radius:var(--rad); padding:24px; transition:transform .25s var(--ease),box-shadow .25s}
+.news-card:hover{transform:translateY(-4px); box-shadow:0 16px 36px -22px rgba(47,53,56,.45)}
+.news-meta{display:flex; align-items:center; gap:10px; font-family:var(--f-display); font-size:12px; letter-spacing:.04em}
+.news-date{color:var(--graphite-mute)} .news-pill{background:var(--steel-pale); color:var(--steel-deep); padding:3px 9px; border-radius:var(--rad); font-weight:600; text-transform:uppercase; letter-spacing:.08em; font-size:11px}
+.news-card h3{font-size:18px; margin:12px 0 8px} .news-card p{font-size:14px; color:var(--graphite-soft); margin:0}
+.news-editor{background:var(--beige); border:1px solid var(--hairline)}
+.news-editor label{color:var(--graphite-mute)} .news-editor input,.news-editor textarea,.news-editor select{background:#fff; color:var(--graphite); border-color:var(--hairline)}
+.news-editor h4{color:var(--graphite)} .news-editor .hint{color:var(--graphite-mute)}
+
+/* ============ 10. NORMEN / COMPLIANCE ============ */
+#compliance{background:var(--steel)}
+.norm-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:30px}
+.norm{padding:22px 18px; border:1px solid rgba(255,255,255,.22); border-radius:var(--rad); background:rgba(255,255,255,.06)}
+.norm .k{font-family:var(--f-display); font-weight:800; font-size:26px; color:#fff}
+.norm .v{font-size:13.5px; color:#eaf1f7; margin-top:6px}
+#compliance .sec-head h2{color:#fff} #compliance .sec-head p{color:#eaf1f7}
+#compliance .eyebrow{color:#fff} #compliance .eyebrow::before{background:#fff}
+.dsgvo-note{margin-top:26px; display:flex; gap:12px; align-items:flex-start; font-size:14px; color:#eef4f9; border-left:3px solid #fff; padding:6px 0 6px 14px; max-width:78ch}
+
+/* ============ 11. KONTAKT + ANFAHRT (Vektor-Karte, keine Drittanbieter) ============ */
+#kontakt{background:var(--olive)}
+.kontakt-grid{display:grid; grid-template-columns:1fr 1fr; gap:clamp(28px,5vw,48px); align-items:start}
+.k-card{background:var(--beige-pale); border-radius:var(--rad); padding:26px}
+.k-card .row{display:flex; gap:14px; padding:13px 0; border-bottom:1px solid var(--hairline)} .k-card .row:last-child{border-bottom:0}
+.k-ico{flex:0 0 38px; height:38px; background:var(--olive-pale); border-radius:var(--rad); display:flex; align-items:center; justify-content:center}
+.k-card .lab{font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--graphite-mute); font-family:var(--f-display); font-weight:600}
+.k-card .val{font-weight:500}
+.anfahrt{background:var(--beige-pale); border-radius:var(--rad); overflow:hidden; border:1px solid var(--hairline)}
+.anfahrt .map{aspect-ratio:3/2; background:var(--olive-pale)} .anfahrt .map svg{width:100%; height:100%}
+.anfahrt .cap{padding:12px 16px; font-size:13px; color:var(--graphite-soft); display:flex; justify-content:space-between; gap:10px}
+.anfahrt .cap b{font-family:var(--f-display); color:var(--graphite)}
+
+/* ============ 12. FOOTER + IMPRESSUM (§5 DDG/TMG – echte Daten) ============ */
+.site-foot{background:var(--graphite); color:var(--olive-pale); padding:clamp(48px,7vw,76px) 0 0}
+.foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:34px}
+.site-foot h4{font-family:var(--f-display); font-weight:700; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--olive-deep); margin:0 0 14px}
+.legal{font-size:13.5px; line-height:1.75; color:#c9cbb9} .legal b{color:#fff; font-weight:600}
+.foot-links{display:grid; gap:9px; font-size:14px} .foot-links a:hover{color:#fff; text-decoration:underline}
+.foot-bottom{margin-top:42px; border-top:1px solid rgba(255,255,255,.12); padding:20px 0; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:12.5px; color:#8d9085}
+
+/* ============ 13. COOKIE-CONSENT (DSGVO, nicht-blockierend) ============ */
+.cookie{position:fixed; left:14px; right:14px; bottom:14px; z-index:160; max-width:560px; margin:0 auto;
+  background:#fff; border:1px solid var(--hairline); border-top:4px solid var(--orange); border-radius:var(--rad);
+  box-shadow:0 22px 50px -18px rgba(0,0,0,.45); padding:20px 22px; transform:translateY(160%); transition:transform .5s var(--ease)}
+.cookie.show{transform:translateY(0)}
+.cookie h4{font-family:var(--f-display); font-weight:700; font-size:16px; margin:0 0 6px}
+.cookie p{font-size:13.5px; color:var(--graphite-soft); margin:0 0 14px} .cookie p a{color:var(--steel-deep); text-decoration:underline}
+.cookie-btns{display:flex; flex-wrap:wrap; gap:9px}
+.cookie-btns button{padding:11px 16px; font-family:var(--f-display); font-weight:700; font-size:13.5px; border-radius:var(--rad)}
+.c-accept{background:var(--orange); color:#fff} .c-accept:hover{background:var(--orange-deep)}
+.c-min{background:var(--olive-pale); color:var(--graphite)} .c-min:hover{background:var(--olive-soft)}
+.c-set{background:transparent; color:var(--graphite-mute); text-decoration:underline}
+
+/* ============ 14. RESPONSIVE ============ */
+@media(max-width:920px){
+  .unt-grid{grid-template-columns:1fr} .proc{grid-template-columns:1fr} .leist-grid{grid-template-columns:1fr}
+  .kontakt-grid{grid-template-columns:1fr} .foot-grid{grid-template-columns:1fr; gap:30px}
+  .gal-grid{grid-template-columns:repeat(2,1fr)} .news-grid{grid-template-columns:1fr}
+  .norm-grid{grid-template-columns:1fr 1fr}
+  .nav-links,.lang{display:none} .burger{display:flex}
+  .nav-links.open{display:flex; position:absolute; top:66px; left:0; right:0; flex-direction:column; gap:0; background:var(--beige-pale); border-bottom:1px solid var(--hairline); padding:8px}
+  .nav-links.open a{padding:14px 16px; color:var(--graphite-soft)}
+  /* Cover stapelt sich */
+  .cover{height:auto; min-height:0}
+  .cover-grid{grid-template-columns:1fr 1fr; grid-template-rows:auto auto auto auto;
+    grid-template-areas:"head head" "art art" "main main" "accent foot"; height:auto}
+  .cv-art{aspect-ratio:4/5; min-height:340px}
+  .cv-main{min-height:300px}
+  .cv-accent{min-height:84px} .cv-foot{min-height:84px}
+  .ref-item{grid-template-columns:1fr; gap:4px} .ref-item .qm{color:var(--brass-deep)}
+}
+@media(max-width:520px){ .gal-grid{grid-template-columns:1fr 1fr} .norm-grid{grid-template-columns:1fr} .ba-grip{width:52px; height:52px} .editor .row2{grid-template-columns:1fr} }
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important; transition:none!important; scroll-behavior:auto!important}
+  .reveal,.cv,.g-ring,.g-mtn,.g-sun,.g-branch path,.g-branch circle,.g-dim,.cv-node{opacity:1!important; transform:none!important; stroke-dashoffset:0!important}
+}
+</style>
+</head>
+<body>
+<a href="#unternehmen" class="skip">Zum Inhalt springen</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-head transparent" id="head">
+  <div class="wrap nav">
+    <a class="brand" href="#" aria-label="cheng Bau GmbH Startseite"><span class="mark" aria-hidden="true"></span>cheng Bau <span class="gmbh">GmbH</span></a>
+    <nav class="nav-links" id="navLinks" aria-label="Hauptnavigation">
+      <a href="#unternehmen" data-i18n="nav_unt">Unternehmen</a>
+      <a href="#leistungen" data-i18n="nav_leist">Leistungen</a>
+      <a href="#referenzen" data-i18n="nav_ref">Referenzen</a>
+      <a href="#galerie" data-i18n="nav_gal">Galerie</a>
+      <a href="#aktuelles" data-i18n="nav_news">Aktuelles</a>
+      <a href="#kontakt" data-i18n="nav_kontakt">Kontakt</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Sprache wählen">
+      <button data-lang="de" aria-pressed="true">DE</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
+      <button data-lang="zh" aria-pressed="false">中</button>
+    </div>
+    <button class="burger" id="burger" aria-label="Menü" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<!-- ============ COVER / OPENING ============ -->
+<section class="cover" id="cover" aria-label="Startbild">
+  <div class="cover-grid">
+    <div class="cv cv-head">
+      <span class="eyebrow" data-i18n="cover_eyebrow">Generalplaner &amp; Bauunternehmen · Berlin-Mitte · seit 2010</span>
+    </div>
+
+    <div class="cv cv-main">
+      <span class="kicker" data-i18n="cover_kicker">Planungsbüro &amp; Bauunternehmen</span>
+      <span class="cv-wordmark">cheng<br>Bau</span>
+      <span class="cv-slogan" data-i18n="cover_slogan">Planen und Bauen <b>aus einer Hand.</b></span>
+      <a class="cv-cta" href="#kontakt"><span data-i18n="cover_cta">Projekt anfragen</span> <span aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="cv cv-accent"><span class="cv-zh">规划 · 营造 · 交付</span></div>
+
+    <div class="cv cv-foot">
+      <span class="seit">EST. 2010</span>
+      <span class="scroll-cue"><span data-i18n="cover_scroll">Scrollen</span><span class="ln" aria-hidden="true"></span></span>
+    </div>
+
+    <!-- Mondtor (月洞门) mit Shanshui-Landschaft – die Signatur der Seite -->
+    <div class="cv cv-art" aria-hidden="true">
+      <svg viewBox="0 0 600 720" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D7E1EB"/><stop offset="1" stop-color="#ECEDE0"/></linearGradient>
+          <mask id="gateMask"><rect width="600" height="720" fill="#000"/><circle cx="300" cy="360" r="226" fill="#fff"/></mask>
+          <clipPath id="gateClip"><circle cx="300" cy="360" r="226"/></clipPath>
+        </defs>
+        <rect width="600" height="720" fill="#2F3538"/>
+        <g mask="url(#gateMask)">
+          <rect width="600" height="720" fill="url(#sky)"/>
+          <circle class="g-sun" cx="392" cy="236" r="58" fill="#BB8936"/>
+          <path class="g-mtn g-far" d="M60 470 L210 296 L300 384 L432 248 L560 432 L560 600 L60 600 Z" fill="#8FADC9"/>
+          <path class="g-mtn g-mid" d="M30 522 L182 360 L300 472 L470 332 L600 502 L600 640 L30 640 Z" fill="#5E8FBD"/>
+          <path class="g-mtn g-near" d="M40 604 L222 472 L362 560 L520 462 L600 540 L600 720 L40 720 Z" fill="#596063"/>
+          <g stroke="#5E8FBD" stroke-width="3" opacity=".5"><line x1="130" y1="648" x2="270" y2="648"/><line x1="312" y1="672" x2="476" y2="672"/><line x1="190" y1="696" x2="372" y2="696"/></g>
+        </g>
+        <circle class="g-ring" cx="300" cy="360" r="226" fill="none" stroke="#BB8936" stroke-width="7"/>
+        <circle cx="300" cy="360" r="214" fill="none" stroke="#E8E4D5" stroke-width="1.5" opacity=".45"/>
+        <!-- blühender Zweig (Referenz an das Möbel-Stillleben) -->
+        <g class="g-branch" clip-path="url(#gateClip)"><path d="M150 152 C 244 232, 228 332, 332 360 C 402 378, 432 350, 472 360" stroke="#2F3538" stroke-width="3.5" fill="none"/>
+          <g fill="#EB663A"><circle cx="252" cy="262" r="9"/><circle cx="302" cy="320" r="11"/><circle cx="352" cy="357" r="8"/><circle cx="414" cy="357" r="10"/><circle cx="206" cy="214" r="7"/></g></g>
+        <!-- DIN-Bemaßung: Ingenieur trifft Gartenkunst -->
+        <g class="g-dim"><line x1="76" y1="360" x2="524" y2="360" stroke="#BB8936" stroke-width="1.2" stroke-dasharray="2 4"/>
+          <path d="M76 360 l11 -5 v10 z" fill="#BB8936"/><path d="M524 360 l-11 -5 v10 z" fill="#BB8936"/>
+          <rect x="276" y="349" width="48" height="22" fill="#2F3538"/><text x="300" y="365" text-anchor="middle" font-family="Archivo,sans-serif" font-size="14" font-weight="700" fill="#E8E4D5">Ø</text></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<main id="main">
+
+<!-- ============ UNTERNEHMEN ============ -->
+<section id="unternehmen" class="sec-pad">
+  <span class="regmark tr" aria-hidden="true"></span>
+  <div class="wrap unt-grid">
+    <div class="reveal unt-body">
+      <span class="eyebrow" data-i18n="unt_eyebrow">Unternehmen</span>
+      <div class="sec-head" style="margin-bottom:18px"><h2 data-i18n="unt_h">Wir begleiten den kompletten Bauprozess.</h2></div>
+      <!-- ORIGINAL-TEXT (1:1 vom Bestandsauftritt übernommen) -->
+      <p class="lead-strong" data-i18n="unt_p1">Wir begleiten den kompletten Bauprozess – und der beginnt nicht erst auf der Baustelle, sondern schon bei der Planung.</p>
+      <p data-i18n="unt_p2">Planen und Bauen aus einer Hand – darin liegt unsere Stärke. Gemeinsam mit dem Kunden entwickeln wir bedürfnis- und kostengerechte planerische Lösungen. Die sich anschließende Bauausführung betreuen wir bis ins letzte Detail mit Kompetenz und großer Erfahrung. Dabei arbeiten wir mit namhaften Architekten zusammen und pflegen einen engen Kontakt zu unseren Baustofflieferanten. Dies garantiert die ständige Aktualisierung des technischen Niveaus.</p>
+
+      <!-- Der Prozess als 3 Phasen – verankert den "aus einer Hand"-Burggraben visuell -->
+      <div class="proc">
+        <div class="step"><div class="n">PHASE 01</div><h4 data-i18n="proc1_h">Planung</h4><p data-i18n="proc1_p">Entwurf &amp; kostengerechte Lösung mit namhaften Architekten.</p></div>
+        <div class="step"><div class="n">PHASE 02</div><h4 data-i18n="proc2_h">Ausführung</h4><p data-i18n="proc2_p">Bauleitung bis ins letzte Detail – ein Ansprechpartner.</p></div>
+        <div class="step"><div class="n">PHASE 03</div><h4 data-i18n="proc3_h">Übergabe</h4><p data-i18n="proc3_p">Termintreue Fertigstellung auf aktuellem technischen Niveau.</p></div>
+      </div>
+    </div>
+
+    <aside class="fact-card reveal" aria-label="Unternehmensdaten">
+      <span class="seit">Est. 2010</span>
+      <span class="stamp">Amtsgericht Charlottenburg</span>
+      <h3 data-i18n="fact_h">Geprüft &amp; eingetragen</h3>
+      <div class="fact-row"><span data-i18n="fact_gf">Geschäftsführer</span><span>Guohua Cheng, Dipl.-Ing.</span></div>
+      <div class="fact-row"><span>HRB</span><span>124993&nbsp;B</span></div>
+      <div class="fact-row"><span data-i18n="fact_tax">Steuernummer</span><span>37/183/21590</span></div>
+      <div class="fact-row"><span data-i18n="fact_seat">Sitz</span><span>Torstraße 99, Berlin</span></div>
+      <div class="fact-row"><span data-i18n="fact_scope">Gegenstand</span><span data-i18n="fact_scope_v">Planung &amp; Bau</span></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ LEISTUNGEN (4 echte Leistungen) ============ -->
+<section id="leistungen" class="sec-pad">
+  <span class="regmark bl" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="leist_eyebrow">Leistungen · Leistungsspektrum</span>
+      <h2 data-i18n="leist_h">Vier Spezialgebiete – ein verantwortliches Haus.</h2>
+      <p data-i18n="leist_p">Die cheng Bau GmbH ist ein Bauunternehmen mit dem folgenden Leistungsspektrum.</p>
+    </div>
+
+    <div class="leist-grid">
+      <!-- 1 HAUSBAU – inkl. der Profil-Nische "chinesischer Garten" (kulturelle Differenzierung) -->
+      <article class="leist-card reveal">
+        <div class="leist-num">01 — HAUSBAU</div>
+        <h3 data-i18n="c1_h">Hausbau · Einfamilienhäuser</h3>
+        <div class="leist-tag" data-i18n="c1_tag">Neubau · schlüsselfertig · Landschaftsplanung</div>
+        <p data-i18n="c1_p">Im eigenen Haus sein eigener Herr sein. Entscheiden Sie sich zwischen verschiedenen Einfamilienhäusern oder zeigen Sie uns Ihr Wunschhaus – wir geben Ihrer Vorstellung die gewünschte Form und begleiten die Realisierung mit Rat und Tat. Auch die Landschaftsplanung des Grundstücks – bis hin zur tiefen, harmonischen Schönheit eines chinesischen Gartens – liefern wir nach Ihren Wünschen.</p>
+      </article>
+
+      <!-- 2 ALTBAUSANIERUNG – Denkmal/Stuck/Behörden = Seriositätssignal -->
+      <article class="leist-card reveal">
+        <div class="leist-num">02 — ALTBAU</div>
+        <h3 data-i18n="c2_h">Altbausanierung</h3>
+        <div class="leist-tag" data-i18n="c2_tag">Außen- &amp; Innensanierung · Denkmalschutz</div>
+        <p data-i18n="c2_p">Beleben Sie den Charme alter Bauten. Mit der nötigen Behutsamkeit und stilgerechter Liebe zum Detail gewinnen alte Fassaden ihre Einmaligkeit zurück: Neugestaltung von Fenstern und Türen, Stuckaufarbeitung, bei denkmalgeschützten Objekten Absprachen mit Behörden und Putzuntersuchungen – alles Notwendige im Rahmen unserer Leistungen.</p>
+      </article>
+
+      <!-- 3 FASSADE / WDVS – energetischer Fachbegriff, förderrelevant -->
+      <article class="leist-card reveal">
+        <div class="leist-num">03 — FASSADE</div>
+        <h3 data-i18n="c3_h">Fassaden · Wärmedämmverbundsysteme</h3>
+        <div class="leist-tag" data-i18n="c3_tag">WDVS · mineralisch / organisch / anorganisch</div>
+        <p data-i18n="c3_p">Wir bieten alle Varianten professioneller Wärmedämmverbundsysteme – mineralische, organische und anorganische Systeme, die Ihrem Haus ökonomisch wie ökologisch eine Schutzhülle verleihen. Auch für geringe zusätzliche Dämmleistung decken wir Ihre Anforderungen mit Wärmedämmputz ab. Wir versichern Ihnen kompetente Beratung und Referenzen vieler zufriedener Kunden.</p>
+      </article>
+
+      <!-- 4 MAUERWERKSTROCKENLEGUNG – autorisierter Fachbetrieb, konkretes Verfahren -->
+      <article class="leist-card reveal">
+        <div class="leist-num">04 — TROCKENLEGUNG</div>
+        <h3 data-i18n="c4_h">Mauerwerkstrockenlegung</h3>
+        <div class="leist-tag" data-i18n="c4_tag">Autorisierter Fachbetrieb · Sto-Murisol</div>
+        <p data-i18n="c4_p">Als autorisierter Fachbetrieb bringen wir Ihre Altbauten ins Trockene. Das von uns verwendete Sto-Murisol Impulsverfahren ist flexibel einsetzbar und erreicht einen sehr hohen Schutz gegen aufsteigende Feuchtigkeit.</p>
+      </article>
+    </div>
+
+    <p class="leist-foot reveal" data-i18n="leist_foot">Wir entwerfen und bauen Ein- und Mehrfamilienhäuser und sind sowohl im Innenausbau als auch in der Altbausanierung tätig. Die Fassadenwärmedämmung gehört zu unseren Schwerpunkten.</p>
+  </div>
+</section>
+
+<!-- ============ REFERENZEN ============ -->
+<section id="referenzen" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="ref_eyebrow">Referenzen · Vorher / Nachher</span>
+      <h2 data-i18n="ref_h">Ziehen Sie den Griff. Sehen Sie den Unterschied.</h2>
+      <p data-i18n="ref_p">Der ehrlichste Qualitätsnachweis im Bau ist der direkte Vergleich. Verschieben Sie den Regler – am Smartphone per Finger.</p>
+    </div>
+
+    <div class="reveal">
+      <div class="ref-tabs" role="tablist" aria-label="Projekt wählen">
+        <button role="tab" aria-selected="true"  data-project="0">Torstraße 99 · Berlin-Mitte</button>
+        <button role="tab" aria-selected="false" data-project="1">Schönhauser Allee 182a · Pankow</button>
+        <button role="tab" aria-selected="false" data-project="2">Tempelhofer Ufer 14 · Kreuzberg</button>
+      </div>
+      <div class="ba" id="ba" role="slider" tabindex="0" aria-label="Vorher-Nachher-Vergleich" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        <div class="ba-layer ba-before" id="baBefore" aria-hidden="true"></div>
+        <div class="ba-layer ba-after"  id="baAfter"  aria-hidden="true"></div>
+        <span class="ba-tag before" data-i18n="ba_before">Vorher</span>
+        <span class="ba-tag after"  data-i18n="ba_after">Nachher</span>
+        <div class="ba-handle" id="baHandle"><div class="ba-grip" aria-hidden="true"><i></i><i></i><i></i></div></div>
+      </div>
+      <div class="ref-caption">
+        <span><b id="refTitle">Torstraße 99 · Berlin-Mitte</b> — <span id="refDesc">Komplette Altbausanierung, Stuckfassade mit Verotec System.</span></span>
+        <span id="refMeta">2.700 m² Wohnfläche · 3.100 m² Fassade</span>
+      </div>
+    </div>
+
+    <!-- Echte Referenzliste (1:1 aus dem Bestand) -->
+    <div class="ref-list reveal" id="refList" aria-label="Referenzprojekte"></div>
+  </div>
+</section>
+
+<!-- ============ GALERIE ============ -->
+<section id="galerie" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-bar reveal">
+      <div class="sec-head" style="margin-bottom:0">
+        <span class="eyebrow" data-i18n="gal_eyebrow">Galerie · Projektbilder</span>
+        <h2 data-i18n="gal_h">Ausgewählte Arbeiten.</h2>
+        <p data-i18n="gal_p">Ein Einblick in Fassaden, Sanierungen und Innenräume. Pflegbar über das Redaktionssystem.</p>
+      </div>
+      <button class="editbtn" id="galEdit" aria-pressed="false">＋ <span data-i18n="gal_add">Bild hinzufügen</span></button>
+    </div>
+
+    <div class="gal-grid" id="galGrid"></div>
+
+    <!-- Redaktions-/Upload-Demo: zeigt dem Bauherrn, dass künftige Pflege trivial ist.
+         Bild -> FileReader -> dataURL -> Array + localStorage (mit Fallback). -->
+    <div class="editor" id="galEditor">
+      <h4 data-i18n="gal_ed_h">Neues Projektbild hochladen</h4>
+      <label data-i18n="gal_ed_file">Bilddatei</label>
+      <input class="file" type="file" id="galFile" accept="image/*">
+      <label data-i18n="gal_ed_cap">Bildunterschrift</label>
+      <input type="text" id="galCap" placeholder="z. B. Stuckfassade, Christinenstraße 38">
+      <button class="save" id="galSave" data-i18n="gal_ed_save">Veröffentlichen</button>
+      <div class="hint" data-i18n="gal_ed_hint">Demo: Speicherung lokal im Browser. Im Livebetrieb an CMS / Medienverwaltung angebunden.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AKTUELLES / NEWS ============ -->
+<section id="aktuelles" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-bar reveal">
+      <div class="sec-head" style="margin-bottom:0">
+        <span class="eyebrow" data-i18n="news_eyebrow">Aktuelles · Neuigkeiten</span>
+        <h2 data-i18n="news_h">Aus dem Hause cheng Bau.</h2>
+        <p data-i18n="news_p">Projektabschlüsse, Verfahren und Förderhinweise – laufend gepflegt.</p>
+      </div>
+      <button class="editbtn" id="newsEdit" aria-pressed="false" style="border-color:var(--hairline); color:var(--graphite)">＋ <span data-i18n="news_add">Beitrag verfassen</span></button>
+    </div>
+
+    <div class="news-grid" id="newsGrid"></div>
+
+    <div class="editor news-editor" id="newsEditor">
+      <h4 data-i18n="news_ed_h">Neuen Beitrag verfassen</h4>
+      <div class="row2">
+        <div><label data-i18n="news_ed_title">Titel</label><input type="text" id="newsTitle" placeholder="z. B. Projektabschluss Hostel Kreuzberg"></div>
+        <div><label data-i18n="news_ed_tag">Kategorie</label>
+          <select id="newsTag"><option>Projekt</option><option>Verfahren</option><option>Förderung</option><option>Unternehmen</option></select></div>
+      </div>
+      <label data-i18n="news_ed_text">Text</label>
+      <textarea id="newsText" rows="3" placeholder="Kurzbeschreibung des Beitrags …"></textarea>
+      <button class="save" id="newsSave" data-i18n="news_ed_save">Veröffentlichen</button>
+      <div class="hint" data-i18n="news_ed_hint">Demo: Speicherung lokal im Browser. Im Livebetrieb an CMS / Redaktionssystem angebunden.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NORMEN / COMPLIANCE ============ -->
+<section id="compliance" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="norm_eyebrow">Sicherheit &amp; Konformität</span>
+      <h2 data-i18n="norm_h">Gebaut nach Norm. Dokumentiert für den Bauherrn.</h2>
+      <p data-i18n="norm_p">Verträge auf VOB/B-Basis, Ausführung nach DIN – nachvollziehbar für Auftraggeber, Banken und Behörden.</p>
+    </div>
+    <div class="norm-grid">
+      <div class="norm reveal"><div class="k">HOAI</div><div class="v" data-i18n="n1">Honorarordnung – transparente Planungsleistungen</div></div>
+      <div class="norm reveal"><div class="k">VOB/B</div><div class="v" data-i18n="n2">Bauvertragsrecht – faire, klare Bauverträge</div></div>
+      <div class="norm reveal"><div class="k">DIN</div><div class="v" data-i18n="n3">Ausführung nach gültigen deutschen Normen</div></div>
+      <div class="norm reveal"><div class="k">DSGVO</div><div class="v" data-i18n="n4">Daten &amp; Baustellen-Infos: keine Weitergabe an Dritte</div></div>
+    </div>
+    <p class="dsgvo-note reveal" data-i18n="dsgvo_note">Datenschutz nach DSGVO/GDPR: Ihre Bauunterlagen, Pläne und IP-Adressen werden nicht an Dritte weitergegeben. Diese Website lädt keine externen Karten oder Tracker ohne Ihre Einwilligung – auch die Anfahrtskizze ist eine eingebettete Vektorgrafik.</p>
+  </div>
+</section>
+
+<!-- ============ KONTAKT + ANFAHRT ============ -->
+<section id="kontakt" class="sec-pad">
+  <span class="regmark br" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-i18n="kontakt_eyebrow">Kontakt &amp; Anfahrt</span>
+      <h2 data-i18n="kontakt_h">Sprechen wir über Ihr Vorhaben.</h2>
+    </div>
+    <div class="kontakt-grid">
+      <div class="k-card reveal">
+        <div class="row"><span class="k-ico" aria-hidden="true">📍</span><div><div class="lab" data-i18n="k_adr">Adresse</div><div class="val">Torstraße 99, 10119 Berlin</div></div></div>
+        <div class="row"><span class="k-ico" aria-hidden="true">✆</span><div><div class="lab" data-i18n="k_tel">Telefon</div><div class="val">+49 30 47374090</div></div></div>
+        <div class="row"><span class="k-ico" aria-hidden="true">🖷</span><div><div class="lab" data-i18n="k_fax">Telefax</div><div class="val">+49 30 47374091</div></div></div>
+        <div class="row"><span class="k-ico" aria-hidden="true">✉</span><div><div class="lab" data-i18n="k_mail">E-Mail</div><div class="val">info@cheng-bau.de</div></div></div>
+      </div>
+
+      <!-- Anfahrtskizze als Vektor (Torstraße 99, nahe Rosenthaler Platz / Rosa-Luxemburg-Platz).
+           Bewusst gezeichnet: keine externen Kartenkacheln -> keine IP-Weitergabe (DSGVO). -->
+      <div class="anfahrt reveal">
+        <div class="map">
+          <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anfahrtskizze Torstraße 99, Berlin-Mitte">
+            <rect width="600" height="400" fill="#ECEDE0"/>
+            <!-- Straßen -->
+            <g stroke="#C8CAA0" stroke-width="13" fill="none" stroke-linecap="round">
+              <line x1="-10" y1="150" x2="610" y2="172"/>            <!-- Torstraße (Hauptachse) -->
+              <line x1="-10" y1="120" x2="610" y2="96"/>             <!-- Linienstraße -->
+              <line x1="110" y1="-10" x2="150" y2="410"/>           <!-- Rosenthaler Str. -->
+              <line x1="300" y1="-10" x2="312" y2="410"/>           <!-- Gormannstr. -->
+              <line x1="470" y1="-10" x2="520" y2="410"/>           <!-- Schönhauser Allee -->
+              <line x1="-10" y1="300" x2="610" y2="320"/>           <!-- Weinmeisterstr. -->
+            </g>
+            <g stroke="#DDE0BE" stroke-width="6" fill="none">
+              <line x1="0" y1="240" x2="600" y2="250"/><line x1="220" y1="0" x2="240" y2="400"/><line x1="390" y1="0" x2="400" y2="400"/>
+            </g>
+            <!-- Torstraße-Label -->
+            <text x="360" y="160" font-family="Archivo,sans-serif" font-size="15" font-weight="700" fill="#596063" transform="rotate(2 360 160)">Torstraße</text>
+            <text x="20" y="112" font-family="Archivo,sans-serif" font-size="12" fill="#7d8163" transform="rotate(-2 20 112)">Linienstraße</text>
+            <text x="455" y="60" font-family="Archivo,sans-serif" font-size="12" fill="#7d8163" transform="rotate(80 455 60)">Schönhauser Allee</text>
+            <!-- U-Bahn-Marker (U8) -->
+            <g font-family="Archivo,sans-serif" font-weight="800" font-size="13">
+              <rect x="96" y="150" width="20" height="20" rx="3" fill="#5E8FBD"/><text x="106" y="165" text-anchor="middle" fill="#fff">U</text>
+              <rect x="500" y="168" width="20" height="20" rx="3" fill="#5E8FBD"/><text x="510" y="183" text-anchor="middle" fill="#fff">U</text>
+              <rect x="150" y="120" width="30" height="16" rx="3" fill="#9a6f24"/><text x="165" y="132" text-anchor="middle" fill="#fff" font-size="10">TRAM</text>
+            </g>
+            <text x="70" y="186" font-family="Archivo,sans-serif" font-size="10.5" fill="#596063">Rosenthaler Pl.</text>
+            <text x="470" y="208" font-family="Archivo,sans-serif" font-size="10.5" fill="#596063">Rosa-Luxemburg-Pl.</text>
+            <!-- Standort-Pin: Torstraße 99 -->
+            <g transform="translate(300,150)">
+              <path d="M0 0 C -16 -22, -16 -40, 0 -40 C 16 -40, 16 -22, 0 0 Z" fill="#EB663A" stroke="#fff" stroke-width="2"/>
+              <circle cx="0" cy="-27" r="6" fill="#fff"/>
+            </g>
+            <text x="312" y="120" font-family="Archivo,sans-serif" font-size="13" font-weight="800" fill="#2F3538">cheng Bau · Torstr. 99</text>
+          </svg>
+        </div>
+        <div class="cap"><b>Berlin-Mitte</b><span data-i18n="anfahrt_cap">U8 Rosenthaler Platz / Rosa-Luxemburg-Platz · Tram M1, M8</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER / IMPRESSUM (§5 DDG/TMG – echte Daten) ============ -->
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Impressum (§ 5 DDG/TMG)</h4>
+        <p class="legal">
+          <b>cheng Bau GmbH</b><br>
+          Torstraße 99, 10119 Berlin, Deutschland<br><br>
+          <b>Vertreten durch den Geschäftsführer:</b><br>
+          Guohua Cheng, Dipl.-Ing.<br><br>
+          <b>Registergericht:</b> Amtsgericht Charlottenburg<br>
+          <b>Registernummer:</b> HRB 124993&nbsp;B<br>
+          <b>Steuernummer:</b> 37/183/21590<br><br>
+          <b>Kontakt:</b> Tel. +49 30 47374090 · Fax +49 30 47374091<br>
+          E-Mail: info@cheng-bau.de
+        </p>
+      </div>
+      <div>
+        <h4 data-i18n="foot_legal">Recht &amp; Datenschutz</h4>
+        <nav class="foot-links" aria-label="Rechtliches">
+          <a href="#" id="lnkImpressum">Impressum</a>
+          <a href="#" id="lnkDatenschutz">Datenschutzerklärung (DSGVO)</a>
+          <a href="#" id="lnkCookies" data-i18n="foot_cookie">Cookie-Einstellungen</a>
+          <a href="#">AGB / VOB-Hinweise</a>
+        </nav>
+      </div>
+      <div>
+        <h4 data-i18n="foot_nav">Navigation</h4>
+        <nav class="foot-links" aria-label="Footer-Navigation">
+          <a href="#unternehmen" data-i18n="nav_unt">Unternehmen</a>
+          <a href="#leistungen" data-i18n="nav_leist">Leistungen</a>
+          <a href="#referenzen" data-i18n="nav_ref">Referenzen</a>
+          <a href="#galerie" data-i18n="nav_gal">Galerie</a>
+          <a href="#aktuelles" data-i18n="nav_news">Aktuelles</a>
+          <a href="#kontakt" data-i18n="nav_kontakt">Kontakt</a>
+        </nav>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> cheng Bau GmbH · Planen und Bauen aus einer Hand.</span>
+      <span data-i18n="foot_made">Berliner Planungsbüro &amp; Bauunternehmen · seit 2010</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht">
+  <button class="lb-close" id="lbClose" aria-label="Schließen">×</button>
+  <div class="lb-inner">
+    <div class="lb-stage" id="lbStage"></div>
+    <div class="lb-cap"><span id="lbCap"></span><span class="lb-nav"><button id="lbPrev" aria-label="Zurück">‹</button><button id="lbNext" aria-label="Weiter">›</button></span></div>
+  </div>
+</div>
+
+<!-- Cookie-Consent -->
+<div class="cookie" id="cookie" role="dialog" aria-live="polite" aria-label="Cookie-Hinweis">
+  <h4 data-i18n="ck_h">Datenschutz hat Vorrang</h4>
+  <p data-i18n="ck_p">Wir setzen nur technisch notwendige Cookies. Optionale Dienste laden erst nach Ihrer Einwilligung. Details in der <a href="#" id="ckLink">Datenschutzerklärung</a>.</p>
+  <div class="cookie-btns">
+    <button class="c-accept" id="ckAccept" data-i18n="ck_accept">Alle akzeptieren</button>
+    <button class="c-min" id="ckMin" data-i18n="ck_min">Nur notwendige</button>
+    <button class="c-set" id="ckSet" data-i18n="ck_set">Einstellungen</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Persistenz mit Fallback (localStorage; sonst In-Memory) ---------- */
+  var mem={};
+  function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){ mem[k]=v; } }
+  function load(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):null; }catch(e){ return mem[k]||null; } }
+
+  /* ---------- Projekt-Szenen (Inline-SVG, kein externes Bild-CDN) ---------- */
+  function facade(o){
+    var W=800,H=500, bx=110,by=70,bw=580,bh=360, fH=bh/o.floors, cw=bw/o.cols, win=[];
+    for(var f=0;f<o.floors;f++){ for(var c=0;c<o.cols;c++){
+      var wx=bx+c*cw+cw*0.22, wy=by+f*fH+fH*0.18, ww=cw*0.56, wh=fH*0.6;
+      win.push('<rect x="'+wx.toFixed(1)+'" y="'+wy.toFixed(1)+'" width="'+ww.toFixed(1)+'" height="'+wh.toFixed(1)+'" rx="1" fill="'+o.glass+'" stroke="'+o.trim+'" stroke-width="2"/>');
+      if(o.mode==='after') win.push('<line x1="'+(wx+ww/2)+'" y1="'+wy+'" x2="'+(wx+ww/2)+'" y2="'+(wy+wh)+'" stroke="'+o.trim+'" stroke-width="1.4"/>');
+    }}
+    var ex='';
+    if(o.mode==='before'){
+      ex+='<path d="M'+(bx+90)+' '+by+' l8 70 l-12 60 l6 90" stroke="rgba(0,0,0,.22)" stroke-width="1.5" fill="none"/>';
+      ex+='<path d="M'+(bx+330)+' '+(by+30)+' l-6 80 l10 50" stroke="rgba(0,0,0,.18)" stroke-width="1.3" fill="none"/>';
+      ex+='<rect x="'+(bx+30)+'" y="'+(by+160)+'" width="46" height="30" fill="rgba(0,0,0,.13)"/>';
+      for(var g=0;g<3;g++) ex+='<line x1="'+(bx-14)+'" y1="'+(by+40+g*120)+'" x2="'+(bx+bw+14)+'" y2="'+(by+40+g*120)+'" stroke="rgba(80,70,40,.32)" stroke-dasharray="3 5" stroke-width="1.4"/>';
+      ex+='<line x1="'+(bx-14)+'" y1="'+by+'" x2="'+(bx-14)+'" y2="'+(by+bh)+'" stroke="rgba(80,70,40,.4)" stroke-width="2"/>';
+    }else{
+      ex+='<circle cx="690" cy="120" r="34" fill="'+o.accent+'" opacity=".25"/><circle cx="690" cy="120" r="20" fill="'+o.accent+'" opacity=".55"/>';
+      ex+='<path d="M150 '+(H-40)+' q14 -54 30 0 q-4 -40 -14 -40 q-6 6 -16 40 z" fill="#5b7a45"/><rect x="138" y="'+(H-40)+'" width="34" height="22" rx="2" fill="'+o.trim+'"/>';
+      ex+='<rect x="'+bx+'" y="'+(by-12)+'" width="'+bw+'" height="10" fill="'+o.accent+'" opacity=".85"/>';
+    }
+    return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img">'
+      +'<rect width="'+W+'" height="'+H+'" fill="'+o.sky+'"/><rect y="'+(H-60)+'" width="'+W+'" height="60" fill="'+o.ground+'"/>'
+      +'<rect x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" fill="'+o.wall+'" stroke="'+o.trim+'" stroke-width="2.5"/>'
+      +'<rect x="'+(bx+bw*0.4)+'" y="'+(by+bh-70)+'" width="'+(bw*0.2)+'" height="70" fill="'+o.trim+'" opacity="'+(o.mode==='after'?'.85':'.5')+'"/>'
+      + win.join('') + ex + '</svg>';
+  }
+  var P_BEFORE={mode:'before',glass:'#353A3E',trim:'#596063',ground:'#9a9a7e',accent:'#EB663A'};
+  var P_AFTER ={mode:'after', glass:'#5E8FBD',trim:'#BB8936',ground:'#C8CAA0',accent:'#EB663A'};
+  function mk(extra){ var o={}; for(var k in extra) o[k]=extra[k]; return o; }
+
+  var PROJECTS=[
+    {title:'Torstraße 99 · Berlin-Mitte', meta:'2.700 m² Wohnfläche · 3.100 m² Fassade', dkey:'ref_d0',
+     before:mk(Object.assign({wall:'#B4B786',sky:'#C8CAA0',floors:4,cols:5},P_BEFORE)),
+     after :mk(Object.assign({wall:'#E8E4D5',sky:'#D7E1EB',floors:4,cols:5},P_AFTER))},
+    {title:'Schönhauser Allee 182a · Pankow', meta:'1.200 m² · Modernisierung + Dachausbau', dkey:'ref_d1',
+     before:mk(Object.assign({wall:'#C8CAA0',sky:'#DDE0BE',floors:3,cols:5},P_BEFORE)),
+     after :mk(Object.assign({wall:'#F4F1E6',sky:'#D7E1EB',floors:3,cols:5},P_AFTER))},
+    {title:'Tempelhofer Ufer 14 · Kreuzberg', meta:'1.300 m² Gewerbefläche · Umbau zum Hostel', dkey:'ref_d2',
+     before:mk(Object.assign({wall:'#9a9a7e',sky:'#C8CAA0',floors:3,cols:6},P_BEFORE)),
+     after :mk(Object.assign({wall:'#E8E4D5',sky:'#D7E1EB',floors:3,cols:6},P_AFTER))}
+  ];
+
+  var elBefore=document.getElementById('baBefore'), elAfter=document.getElementById('baAfter'),
+      ba=document.getElementById('ba'), handle=document.getElementById('baHandle'),
+      refTitle=document.getElementById('refTitle'), refMeta=document.getElementById('refMeta'), refDesc=document.getElementById('refDesc');
+
+  function loadProject(i){
+    var p=PROJECTS[i];
+    elBefore.innerHTML=facade(p.before); elAfter.innerHTML=facade(p.after);
+    refTitle.textContent=p.title; refMeta.textContent=p.meta;
+    refDesc.setAttribute('data-i18n',p.dkey); applyLang(currentLang); setPos(50);
+  }
+
+  /* ---------- (A) Before/After: Pointer Events + rAF = latenzfrei am Handy ---------- */
+  var dragging=false, pendingX=null, rafId=null;
+  function setPos(pct){ pct=Math.max(0,Math.min(100,pct)); elAfter.style.clipPath='inset(0 0 0 '+pct+'%)'; handle.style.left=pct+'%'; ba.setAttribute('aria-valuenow',Math.round(pct)); }
+  function pctFromX(x){ var r=ba.getBoundingClientRect(); return ((x-r.left)/r.width)*100; }
+  function schedule(x){ pendingX=x; if(rafId) return; rafId=requestAnimationFrame(function(){ rafId=null; if(pendingX!=null) setPos(pctFromX(pendingX)); }); }
+  function haptic(ms){ if(navigator.vibrate){ try{ navigator.vibrate(ms); }catch(e){} } }
+  ba.addEventListener('pointerdown', function(e){ dragging=true; ba.setPointerCapture(e.pointerId); haptic(8); schedule(e.clientX); });
+  ba.addEventListener('pointermove', function(e){ if(dragging) schedule(e.clientX); });
+  ba.addEventListener('pointerup', function(){ dragging=false; });
+  ba.addEventListener('pointercancel', function(){ dragging=false; });
+  ba.addEventListener('keydown', function(e){
+    var now=parseInt(ba.getAttribute('aria-valuenow'),10)||50, s=(e.shiftKey?10:4);
+    if(e.key==='ArrowLeft'){ setPos(now-s); e.preventDefault(); } else if(e.key==='ArrowRight'){ setPos(now+s); e.preventDefault(); }
+    else if(e.key==='Home'){ setPos(0); e.preventDefault(); } else if(e.key==='End'){ setPos(100); e.preventDefault(); }
+  });
+  document.querySelectorAll('.ref-tabs button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.ref-tabs button').forEach(function(b){ b.setAttribute('aria-selected','false'); });
+      btn.setAttribute('aria-selected','true'); loadProject(parseInt(btn.getAttribute('data-project'),10)); haptic(6);
+    });
+  });
+
+  /* ---------- Echte Referenzliste ---------- */
+  var REFERENCES=[
+    ['Torstraße 99 · Berlin-Mitte','Komplette Altbausanierung · Stuckfassade mit Verotec System','2.700 / 3.100 m²'],
+    ['Treuchtlinger Straße 1 · Schöneberg','Fassadensanierung und Malerarbeiten','1.200 m²'],
+    ['Christinenstraße 38 · Prenzlauer Berg','Komplette Altbausanierung mit Stuckfassade','650 m²'],
+    ['Ludwig-Quidde-Platz 22–28 · Köln','Vollwärmeschutz','ca. 9.000 m²'],
+    ['Argentinisches Konsulat · Berlin-Dahlem','Altbausanierung mit Mauerwerkstrockenlegung','250 m²'],
+    ['Spitzbubenweg 48 · Caputh','Planung und Kostenkalkulation Einfamilienhaus','ca. 220 m²'],
+    ['Friedrich Carree · Berlin-Mitte','Vollwärmeschutz','ca. 1.500 m²'],
+    ['Schönhauser Allee 182a · Prenzlauer Berg','Modernisierung und Dachausbau · Bauhauptgewerk','1.200 m²'],
+    ['Merowinger Weg 3 · Charlottenburg','Modernisierung und Anbau Einfamilienhaus mit Außenanlage','300 m²'],
+    ['Tempelhofer Ufer 14 · Kreuzberg','Umbau zu einem Hostel · Bauhauptgewerk','1.300 m²'],
+    ['Antwerpener Str. 38 · Wedding','Komplettumbau einer Wohnung von 1928 in 2 Monaten','100 m²']
+  ];
+  (function(){ var h=''; REFERENCES.forEach(function(r){
+    h+='<div class="ref-item"><div class="adr">'+r[0]+'</div><div class="desc">'+r[1]+'</div><div class="qm">'+r[2]+'</div></div>';
+  }); document.getElementById('refList').innerHTML=h; })();
+
+  /* ---------- (B) GALERIE: datengetrieben + Upload-Demo ---------- */
+  function tile(o){ return facade(Object.assign({wall:o.wall,sky:o.sky,floors:o.floors,cols:o.cols},P_AFTER)); }
+  var GAL_SEED=[
+    {cap:'Stuckfassade · Torstraße 99', svg:tile({wall:'#E8E4D5',sky:'#D7E1EB',floors:4,cols:5})},
+    {cap:'Dachausbau · Schönhauser Allee', svg:tile({wall:'#F4F1E6',sky:'#ECEDE0',floors:3,cols:5})},
+    {cap:'Vollwärmeschutz · Friedrich Carree', svg:tile({wall:'#DDE0BE',sky:'#D7E1EB',floors:4,cols:6})},
+    {cap:'Altbausanierung · Christinenstr. 38', svg:tile({wall:'#E8E4D5',sky:'#C8CAA0',floors:3,cols:4})},
+    {cap:'Hostel-Umbau · Tempelhofer Ufer', svg:tile({wall:'#ECEDE0',sky:'#D7E1EB',floors:3,cols:6})},
+    {cap:'Einfamilienhaus · Caputh', svg:tile({wall:'#F4F1E6',sky:'#DDE0BE',floors:2,cols:4})},
+    {cap:'Fassade · WDVS mineralisch', svg:tile({wall:'#E8E4D5',sky:'#D7E1EB',floors:4,cols:5})},
+    {cap:'Anbau · Merowinger Weg 3', svg:tile({wall:'#DDE0BE',sky:'#ECEDE0',floors:2,cols:5})}
+  ];
+  var gallery = load('cb_gallery') || GAL_SEED;
+  var galGrid=document.getElementById('galGrid');
+  function renderGallery(){
+    galGrid.innerHTML = gallery.map(function(g,i){
+      var media = g.img ? '<img src="'+g.img+'" alt="'+g.cap+'" loading="lazy">' : g.svg;
+      return '<div class="gal-item" data-i="'+i+'" tabindex="0" role="button" aria-label="'+g.cap+'">'+media+'<div class="gal-cap">'+g.cap+'</div></div>';
+    }).join('');
+  }
+  renderGallery();
+
+  // Lightbox
+  var lb=document.getElementById('lightbox'), lbStage=document.getElementById('lbStage'), lbCap=document.getElementById('lbCap'), lbIndex=0;
+  function openLB(i){ lbIndex=i; var g=gallery[i]; lbStage.innerHTML = g.img ? '<img src="'+g.img+'" alt="'+g.cap+'">' : g.svg; lbCap.textContent=g.cap; lb.classList.add('open'); }
+  function moveLB(d){ lbIndex=(lbIndex+d+gallery.length)%gallery.length; openLB(lbIndex); }
+  galGrid.addEventListener('click', function(e){ var t=e.target.closest('.gal-item'); if(t) openLB(parseInt(t.getAttribute('data-i'),10)); });
+  galGrid.addEventListener('keydown', function(e){ if((e.key==='Enter'||e.key===' ')){ var t=e.target.closest('.gal-item'); if(t){ e.preventDefault(); openLB(parseInt(t.getAttribute('data-i'),10)); } } });
+  document.getElementById('lbClose').addEventListener('click', function(){ lb.classList.remove('open'); });
+  document.getElementById('lbPrev').addEventListener('click', function(){ moveLB(-1); });
+  document.getElementById('lbNext').addEventListener('click', function(){ moveLB(1); });
+  lb.addEventListener('click', function(e){ if(e.target===lb) lb.classList.remove('open'); });
+  document.addEventListener('keydown', function(e){ if(!lb.classList.contains('open')) return; if(e.key==='Escape') lb.classList.remove('open'); else if(e.key==='ArrowLeft') moveLB(-1); else if(e.key==='ArrowRight') moveLB(1); });
+
+  // Editor / Upload
+  var galEditor=document.getElementById('galEditor'), galEdit=document.getElementById('galEdit');
+  galEdit.addEventListener('click', function(){ var open=galEditor.classList.toggle('open'); galEdit.setAttribute('aria-pressed',open?'true':'false'); });
+  document.getElementById('galSave').addEventListener('click', function(){
+    var f=document.getElementById('galFile').files[0], cap=document.getElementById('galCap').value.trim()||'Neues Projektbild';
+    if(!f){ alert('Bitte eine Bilddatei wählen.'); return; }
+    var r=new FileReader();
+    r.onload=function(){ gallery.unshift({cap:cap, img:r.result}); save('cb_gallery',gallery); renderGallery();
+      document.getElementById('galCap').value=''; document.getElementById('galFile').value=''; galEditor.classList.remove('open'); galEdit.setAttribute('aria-pressed','false'); haptic(10); };
+    r.readAsDataURL(f);
+  });
+
+  /* ---------- AKTUELLES / NEWS ---------- */
+  var NEWS_SEED=[
+    {date:'2024-11-04', tag:'Projekt', title:'Hostel Tempelhofer Ufer abgeschlossen', text:'Umbau von 1.300 m² Gewerbefläche zu einem Hostel im Bauhauptgewerk – termingerecht übergeben.'},
+    {date:'2024-09-18', tag:'Verfahren', title:'Mauerwerkstrockenlegung mit Sto-Murisol', text:'Als autorisierter Fachbetrieb setzen wir das Impulsverfahren gegen aufsteigende Feuchtigkeit jetzt projektübergreifend ein.'},
+    {date:'2024-06-30', tag:'Förderung', title:'Energetische Sanierung: WDVS-Beratung', text:'Wir beraten zu förderfähigen Wärmedämmverbundsystemen – mineralisch, organisch und anorganisch.'}
+  ];
+  var news = load('cb_news') || NEWS_SEED;
+  var newsGrid=document.getElementById('newsGrid');
+  function fmtDate(s){ try{ return new Date(s).toLocaleDateString(currentLang==='zh'?'zh-CN':(currentLang==='en'?'en-GB':'de-DE'),{day:'2-digit',month:'short',year:'numeric'}); }catch(e){ return s; } }
+  function renderNews(){
+    newsGrid.innerHTML = news.map(function(n){
+      return '<article class="news-card"><div class="news-meta"><span class="news-pill">'+n.tag+'</span><span class="news-date">'+fmtDate(n.date)+'</span></div><h3>'+n.title+'</h3><p>'+n.text+'</p></article>';
+    }).join('');
+  }
+  renderNews();
+  var newsEditor=document.getElementById('newsEditor'), newsEdit=document.getElementById('newsEdit');
+  newsEdit.addEventListener('click', function(){ var open=newsEditor.classList.toggle('open'); newsEdit.setAttribute('aria-pressed',open?'true':'false'); });
+  document.getElementById('newsSave').addEventListener('click', function(){
+    var t=document.getElementById('newsTitle').value.trim(), x=document.getElementById('newsText').value.trim(), g=document.getElementById('newsTag').value;
+    if(!t){ alert('Bitte einen Titel eingeben.'); return; }
+    news.unshift({date:new Date().toISOString().slice(0,10), tag:g, title:t, text:x||'—'}); save('cb_news',news); renderNews();
+    document.getElementById('newsTitle').value=''; document.getElementById('newsText').value=''; newsEditor.classList.remove('open'); newsEdit.setAttribute('aria-pressed','false'); haptic(10);
+  });
+
+  /* ---------- (C) i18n DE/EN/中 (Rechtstexte bleiben Deutsch) ---------- */
+  var I18N={
+    en:{ nav_unt:'Company',nav_leist:'Services',nav_ref:'References',nav_gal:'Gallery',nav_news:'News',nav_kontakt:'Contact',
+      cover_eyebrow:'General planner & builder · Berlin-Mitte · since 2010', cover_kicker:'Planning office & construction firm', cover_slogan:'Planning & building <b>from one source.</b>', cover_cta:'Request a project', cover_scroll:'Scroll',
+      unt_eyebrow:'Company', unt_h:'We accompany the entire building process.',
+      unt_p1:'We accompany the entire building process – and it begins not on the site, but already in the planning.',
+      unt_p2:'Planning and building from a single source – that is our strength. Together with the client we develop needs- and cost-appropriate planning solutions. We then supervise the construction down to the last detail, with competence and great experience. We work with renowned architects and maintain close contact with our building-material suppliers, which guarantees a continuously up-to-date technical standard.',
+      proc1_h:'Planning', proc1_p:'Design & cost-appropriate solutions with renowned architects.', proc2_h:'Execution', proc2_p:'Site management down to the last detail – one contact.', proc3_h:'Handover', proc3_p:'On-time completion at a current technical standard.',
+      fact_h:'Verified & registered', fact_gf:'Managing Director', fact_tax:'Tax number', fact_seat:'Seat', fact_scope:'Object', fact_scope_v:'Planning & Building',
+      leist_eyebrow:'Services · Scope', leist_h:'Four specialities – one accountable firm.', leist_p:'cheng Bau GmbH is a construction company with the following scope of services.',
+      c1_h:'House building · single-family homes', c1_tag:'New build · turnkey · landscape design', c1_p:'Being your own master in your own house. Choose between various single-family homes or show us your dream house – we give your idea its desired form and accompany the realisation. We also provide the landscape design of the plot, up to the deep, harmonious beauty of a Chinese garden, to your wishes.',
+      c2_h:'Old-building renovation', c2_tag:'Exterior & interior · heritage protection', c2_p:'Revive the charm of old buildings. With the necessary care and a style-appropriate love of detail, old façades regain their uniqueness: redesign of windows and doors, stucco restoration, for listed buildings coordination with authorities and plaster analyses – everything necessary within our services.',
+      c3_h:'Façades · thermal insulation systems', c3_tag:'ETICS · mineral / organic / inorganic', c3_p:'We offer all variants of professional external thermal insulation composite systems – mineral, organic and inorganic – giving your house an economically and ecologically sound protective shell. For modest additional insulation we cover your needs with thermal-insulation plaster. We assure competent advice and references from many satisfied clients.',
+      c4_h:'Masonry damp-proofing', c4_tag:'Authorised specialist · Sto-Murisol', c4_p:'As an authorised specialist firm we keep your old buildings dry. The Sto-Murisol impulse method we use is flexibly applicable and achieves very high protection against rising damp.',
+      leist_foot:'We design and build single- and multi-family houses and work in both interior fit-out and old-building renovation. Façade insulation is one of our focal points.',
+      ref_eyebrow:'References · Before / After', ref_h:'Drag the handle. See the difference.', ref_p:'The most honest proof of quality in construction is the direct comparison. Move the slider – on mobile with your finger.',
+      ba_before:'Before', ba_after:'After', ref_d0:'Complete old-building renovation, stucco façade with Verotec system.', ref_d1:'Modernisation and roof conversion of an apartment house.', ref_d2:'Conversion of commercial space into a hostel.',
+      gal_eyebrow:'Gallery · Project images', gal_h:'Selected works.', gal_p:'A look at façades, renovations and interiors. Maintainable via the editorial system.', gal_add:'Add image',
+      gal_ed_h:'Upload a new project image', gal_ed_file:'Image file', gal_ed_cap:'Caption', gal_ed_save:'Publish', gal_ed_hint:'Demo: stored locally in the browser. In production connected to a CMS / media library.',
+      news_eyebrow:'News', news_h:'From cheng Bau.', news_p:'Project completions, methods and funding notes – continuously maintained.', news_add:'Write post',
+      news_ed_h:'Write a new post', news_ed_title:'Title', news_ed_tag:'Category', news_ed_text:'Text', news_ed_save:'Publish', news_ed_hint:'Demo: stored locally in the browser. In production connected to a CMS.',
+      norm_eyebrow:'Safety & compliance', norm_h:'Built to standard. Documented for the owner.', norm_p:'Contracts on a VOB/B basis, execution to DIN – traceable for clients, banks and authorities.',
+      n1:'Fee schedule – transparent planning services', n2:'Construction contract law – fair, clear contracts', n3:'Execution to current German standards', n4:'Data & site info: no disclosure to third parties',
+      dsgvo_note:'Data protection per GDPR: your documents, plans and IP addresses are not shared with third parties. This site loads no external maps or trackers without your consent – the location map is an embedded vector graphic.',
+      kontakt_eyebrow:'Contact & directions', kontakt_h:'Let’s talk about your project.', k_adr:'Address', k_tel:'Phone', k_fax:'Fax', k_mail:'E-mail', anfahrt_cap:'U8 Rosenthaler Platz / Rosa-Luxemburg-Platz · Tram M1, M8',
+      foot_legal:'Legal & privacy', foot_cookie:'Cookie settings', foot_nav:'Navigation', foot_made:'Berlin planning office & construction firm · since 2010',
+      ck_h:'Privacy comes first', ck_p:'We only set technically necessary cookies. Optional services load only after your consent. Details in the privacy policy.', ck_accept:'Accept all', ck_min:'Necessary only', ck_set:'Settings'
+    },
+    zh:{ nav_unt:'公司',nav_leist:'业务',nav_ref:'案例',nav_gal:'相册',nav_news:'动态',nav_kontakt:'联系',
+      cover_eyebrow:'总规划与施工总包 · 柏林米特区 · 自 2010', cover_kicker:'规划设计 · 施工总包', cover_slogan:'规划与施工 <b>一站式总包。</b>', cover_cta:'咨询项目', cover_scroll:'下滑',
+      unt_eyebrow:'公司', unt_h:'我们陪伴完整的建造全过程。',
+      unt_p1:'我们陪伴完整的建造全过程——而它并非始于工地，而是始于规划阶段。',
+      unt_p2:'规划与施工一站式总包，正是我们的核心优势。我们与客户共同制定贴合需求、控制造价的规划方案；随后的施工执行，我们以专业与丰富经验把控到每一处细节。我们与知名建筑师合作，并与建材供应商保持紧密联系，从而确保技术水准持续更新。',
+      proc1_h:'规划', proc1_p:'与知名建筑师共同制定贴合需求、控制造价的方案。', proc2_h:'施工', proc2_p:'把控到每个细节的现场监理——单一对接人。', proc3_h:'交付', proc3_p:'以最新技术水准守约竣工。',
+      fact_h:'已审核 · 已注册', fact_gf:'总经理', fact_tax:'税号', fact_seat:'注册地', fact_scope:'经营范围', fact_scope_v:'规划与施工',
+      leist_eyebrow:'业务 · 服务范围', leist_h:'四大专长，一家负责到底的公司。', leist_p:'cheng Bau GmbH 是一家提供以下服务范围的建筑公司。',
+      c1_h:'住宅建造 · 独栋别墅', c1_tag:'新建 · 交钥匙 · 庭园景观', c1_p:'在自己的房子里做自己的主人。您可在多款独栋住宅中选择，或把心仪的样子告诉我们——我们将您的设想塑造成形，并全程协助实现。我们也按您的意愿提供地块的景观规划，乃至中式园林那般深邃而和谐之美。',
+      c2_h:'老建筑翻新', c2_tag:'外立面与室内 · 文物保护', c2_p:'唤醒老建筑的魅力。以必要的审慎与符合风格的细节考究，让老旧立面重获其独有韵味：门窗重塑、石膏线修复，文物保护对象与主管部门协调并做抹灰检测——所需一切均在我们的服务范围内。',
+      c3_h:'外立面 · 外墙保温系统', c3_tag:'WDVS · 矿物/有机/无机', c3_p:'我们提供各类专业外墙保温系统（WDVS）——矿物、有机与无机体系，从经济与生态角度为您的房屋披上保护外壳。即便只需少量额外保温，也可用保温抹灰满足需求。我们承诺专业咨询，并提供众多满意客户的案例参考。',
+      c4_h:'墙体防潮（截潮）', c4_tag:'授权专业企业 · Sto-Murisol', c4_p:'作为授权专业企业，我们让您的老建筑保持干燥。所采用的 Sto-Murisol 脉冲工艺应用灵活，对上升潮气具有极高的防护效果。',
+      leist_foot:'我们设计并建造独栋与多户住宅，同时从事室内精装与老房翻新。外墙保温是我们的重点之一。',
+      ref_eyebrow:'案例 · 翻新前/后', ref_h:'拖动手柄，亲眼看见差别。', ref_p:'建筑质量最诚实的证明就是前后对比。拖动滑块——手机端可直接用手指滑动。',
+      ba_before:'翻新前', ba_after:'翻新后', ref_d0:'整体老房翻新，采用 Verotec 系统的石膏线立面。', ref_d1:'公寓楼现代化改造与阁楼加建。', ref_d2:'商业空间改造为旅舍（Hostel）。',
+      gal_eyebrow:'相册 · 工程图片', gal_h:'精选工程。', gal_p:'立面、翻新与室内一览。可通过后台系统持续维护。', gal_add:'添加图片',
+      gal_ed_h:'上传新的工程图片', gal_ed_file:'图片文件', gal_ed_cap:'图片说明', gal_ed_save:'发布', gal_ed_hint:'演示：图片暂存于本地浏览器。正式上线时对接 CMS / 媒体库。',
+      news_eyebrow:'动态 · 新闻', news_h:'来自 cheng Bau。', news_p:'项目竣工、工艺与补贴提示——持续更新。', news_add:'撰写动态',
+      news_ed_h:'撰写新动态', news_ed_title:'标题', news_ed_tag:'分类', news_ed_text:'正文', news_ed_save:'发布', news_ed_hint:'演示：暂存于本地浏览器。正式上线时对接 CMS。',
+      norm_eyebrow:'安全与合规', norm_h:'按规范建造，为甲方留档。', norm_p:'合同以 VOB/B 为基础，施工依 DIN 标准——对业主、银行与政府均可追溯。',
+      n1:'收费规范——透明的规划服务', n2:'建筑合同法——公平清晰的合同', n3:'依现行德国标准施工', n4:'数据与工地信息：绝不外泄第三方',
+      dsgvo_note:'依 DSGVO/GDPR 保护数据：您的图纸、资料与 IP 地址不会提供给第三方；未经同意本站不加载任何外部地图或追踪器——连路线图都是内嵌矢量图。',
+      kontakt_eyebrow:'联系与路线', kontakt_h:'聊聊您的项目。', k_adr:'地址', k_tel:'电话', k_fax:'传真', k_mail:'邮箱', anfahrt_cap:'地铁 U8 Rosenthaler Platz / Rosa-Luxemburg-Platz · 有轨电车 M1、M8',
+      foot_legal:'法律与隐私', foot_cookie:'Cookie 设置', foot_nav:'导航', foot_made:'柏林规划设计与施工总包 · 自 2010',
+      ck_h:'隐私优先', ck_p:'我们仅使用技术必要的 Cookie。可选服务仅在您同意后加载。详见隐私政策。', ck_accept:'全部接受', ck_min:'仅必要', ck_set:'设置'
+    }
+  };
+  var DE_DEFAULT={}; document.querySelectorAll('[data-i18n]').forEach(function(el){ DE_DEFAULT[el.getAttribute('data-i18n')]=el.innerHTML; });
+  var currentLang='de';
+  function applyLang(lang){
+    currentLang=lang; document.documentElement.lang=(lang==='zh'?'zh-CN':lang);
+    var dict = lang==='de'?DE_DEFAULT:I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(function(el){ var k=el.getAttribute('data-i18n'); var v=(dict&&dict[k]!=null)?dict[k]:DE_DEFAULT[k]; if(v!=null) el.innerHTML=v; });
+    document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-lang')===lang?'true':'false'); });
+    renderNews(); // Datumsformat folgt der Sprache
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click', function(){ applyLang(b.getAttribute('data-lang')); }); });
+
+  /* ---------- Cookie-Consent ---------- */
+  var cookie=document.getElementById('cookie');
+  document.getElementById('ckAccept').addEventListener('click', function(){ cookie.classList.remove('show'); });
+  document.getElementById('ckMin').addEventListener('click', function(){ cookie.classList.remove('show'); });
+  document.getElementById('ckSet').addEventListener('click', function(){ alert('Granulares Einwilligungs-Center (Demo).'); });
+  document.getElementById('lnkCookies').addEventListener('click', function(e){ e.preventDefault(); cookie.classList.add('show'); });
+  ['ckLink','lnkDatenschutz'].forEach(function(id){ document.getElementById(id).addEventListener('click', function(e){ e.preventDefault(); alert('Datenschutzerklärung (Demo-Platzhalter).'); }); });
+  document.getElementById('lnkImpressum').addEventListener('click', function(e){ e.preventDefault(); document.querySelector('.site-foot').scrollIntoView({behavior:'smooth'}); });
+  setTimeout(function(){ cookie.classList.add('show'); }, 900);
+
+  /* ---------- Header: transparent über Cover, fest danach ---------- */
+  var head=document.getElementById('head'), cover=document.getElementById('cover'), ticking=false;
+  function onScroll(){
+    var threshold = cover.offsetHeight - 80;
+    if(window.scrollY < threshold) head.classList.add('transparent'); else head.classList.remove('transparent');
+    ticking=false;
+  }
+  window.addEventListener('scroll', function(){ if(!ticking){ requestAnimationFrame(onScroll); ticking=true; } }, {passive:true});
+  onScroll();
+
+  /* ---------- Burger ---------- */
+  var burger=document.getElementById('burger'), links=document.getElementById('navLinks');
+  burger.addEventListener('click', function(){ var open=links.classList.toggle('open'); burger.setAttribute('aria-expanded',open?'true':'false'); });
+  links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ links.classList.remove('open'); burger.setAttribute('aria-expanded','false'); }); });
+
+  /* ---------- Reveal ---------- */
+  if(!reduce && 'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }); },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else { document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); }); }
+
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  /* ---------- Init ---------- */
+  loadProject(0);
+  // Cover-Eröffnungsanimation
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ document.getElementById('cover').classList.add('lit'); }); });
+})();
+</script>
+</body>
+</html>
